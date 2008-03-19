@@ -11,18 +11,29 @@ from pyglet.window import key
 from pyglet.window import mouse
 from pyglet import font as pygletfont
 from pyglet import window
+from pyglet import image
+from pyglet import clock
 
 def main():
-    win = window.Window()
+    clock.set_fps_limit(20)
+    #fps_display = clock.ClockDisplay()
+    win = window.Window(400,300)
     ft = pygletfont.load('Arial', 36)
     message = data.load('sample.txt').read()
     textObject = Text(ft,message)
     win.push_handlers(on_key_press, on_mouse_press)
     win.push_handlers(textObject)
+    archer_data = image.load(data.filepath('walk_sequence.png'))
+    archer_seq = image.ImageGrid(archer_data, 8,8)
+    archer_texture_grid = image.TextureGrid(archer_seq)
+    archer = AnimatedSprite(archer_texture_grid)
     while not win.has_exit:
         win.dispatch_events()
+        clock.tick()
         win.clear()
         textObject.draw()
+        archer.draw()
+        #fps_display.draw()
         win.flip()
         
 class Text(object):
@@ -40,6 +51,15 @@ class Text(object):
     def draw(self):
         self.text.draw()
 
+class AnimatedSprite(object):
+    def __init__(self,texturegrid):
+        self.texture_grid = texturegrid
+        self.frame = 0
+    def draw(self):
+        self.texture_grid[self.frame].blit(300,200)
+        self.frame +=1
+        if self.frame == len(self.texture_grid):
+            self.frame = 0;
 
 def on_key_press(symbol, modifiers):
     if symbol == key.A:
