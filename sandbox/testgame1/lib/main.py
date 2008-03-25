@@ -10,14 +10,13 @@ from pyglet import window
 from pyglet.window import key
 from pyglet.window import mouse
 from pyglet import font as pygletfont
-from pyglet import window
 from pyglet import image
 from pyglet import clock
 
 def main():
     clock.set_fps_limit(20)
-    #fps_display = clock.ClockDisplay()
     win = window.Window(400,300)
+    fps_display = clock.ClockDisplay()
     ft = pygletfont.load('Arial', 36)
     message = data.load('sample.txt').read()
     textObject = Text(ft,message)
@@ -33,7 +32,7 @@ def main():
         win.clear()
         textObject.draw()
         archer.draw()
-        #fps_display.draw()
+        fps_display.draw()
         win.flip()
         
 class Text(object):
