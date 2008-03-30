@@ -6,7 +6,16 @@ Feel free to put all your game code here, or in other modules in this "lib"
 directory.
 '''
 import data
+from pyglet import window
+from pyglet.window.event import WindowEventLogger
+
+win = window.Window(resizable=True)
+
+win.push_handlers(WindowEventLogger())
+
 
 def main():
-    print "Hello from your game's main()"
-    print data.load('sample.txt').read()
+    while not win.has_exit:
+        win.dispatch_events()
+        win.clear()
+        win.flip()
