@@ -12,7 +12,7 @@ from pyglet import window
 from pyglet import clock
 from pyglet import event
 
-win = window.Window(resizable=True)
+win = window.Window(width=800, height=600, resizable=False)
 
 # this for debugging,
 # uncomment if you want to see all events output ot the terminal
@@ -35,7 +35,7 @@ class StateManager(object):
         self.intro = Intro()
         self.intro.push_handlers(self)
         
-        self.menu = Menu()
+        self.menu = Menu(800,600)
         self.menu.push_handlers(self)
         
         self.game = Game()
@@ -70,4 +70,5 @@ class StateManager(object):
     def on_quit(self):
         self.show_menu()
         
-    
+    def on_exit_program(self):
+        win.has_exit = True
