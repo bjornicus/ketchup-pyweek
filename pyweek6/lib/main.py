@@ -55,11 +55,18 @@ class StateManager(object):
     def on_intro_finish(self):
         self.show_menu()
 
-    def on_new_game(self):
+    def on_resume_game(self):
         win.pop_handlers()
         self.currentState = self.game
         win.push_handlers(self.game)
-        
+    
+    def on_new_game(self):
+        win.pop_handlers()
+        self.game = Game()
+        self.game.push_handlers(self)
+        self.currentState = self.game
+        win.push_handlers(self.game)
+
     def on_quit(self):
         self.show_menu()
         
