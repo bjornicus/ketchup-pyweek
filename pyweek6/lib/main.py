@@ -8,6 +8,7 @@ directory.
 from intro import Intro
 from menu import Menu
 from game import Game
+from credits import Credits
 from pyglet import window
 from pyglet import clock
 from pyglet import event
@@ -43,6 +44,8 @@ class StateManager(object):
         
         self.currentState = self.intro
         win.push_handlers(self.intro)
+        
+        self.credits = Credits()
     
     def update(self, dt):
         self.currentState.update(dt)
@@ -69,6 +72,9 @@ class StateManager(object):
 
     def on_quit(self):
         self.show_menu()
+        
+    def on_credits(self):
+        self.currentState = self.credits
         
     def on_exit_program(self):
         win.has_exit = True

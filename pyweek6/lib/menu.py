@@ -8,6 +8,7 @@ class Menu(event.EventDispatcher):
         self.menuItems = []
         self.menuItems.append((pygletfont.Text(self.font,"Start Game"),'on_new_game'))
         self.menuItems.append((pygletfont.Text(self.font,"Resume Game"),'on_resume_game'))
+        self.menuItems.append((pygletfont.Text(self.font,"Credits"),'on_credits'))
         self.menuItems.append((pygletfont.Text(self.font,"Exit"),'on_exit_program'))
         #maybe the following should be a separate method:
         menuHeight = self.menuItems[0][0].height*(len(self.menuItems))
@@ -35,3 +36,4 @@ class Menu(event.EventDispatcher):
 Menu.register_event_type('on_new_game')
 Menu.register_event_type('on_resume_game')
 Menu.register_event_type('on_exit_program')
+Menu.register_event_type('on_credits')
