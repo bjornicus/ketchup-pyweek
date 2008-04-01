@@ -1,36 +1,56 @@
 from pyglet import event
 from pyglet import font as pygletfont
 from pyglet.window import key
+from widget import Widget
+
+class MenuItem(Widget):
+    def __init__(self, drawable, action):
+        Widget.__init__(self,drawable.x,drawable.y,drawable.width,drawable.height)
+        self.drawable = drawable
+        self.action = action
+
+    def draw(self):
+        self.drawable.draw()
+        
+    def do_click_action(self):
+        return True
+
+    def setX(self,x):
+        self.x = x
+        self.drawable.x = x
+
+    def setY(self,y):
+        self.y = y
+        self.drawable.y = y
 
 class Menu(event.EventDispatcher):
     def __init__(self, width, height):
         self.font = pygletfont.load('Arial', 36)
         self.menuItems = []
-        self.menuItems.append((pygletfont.Text(self.font,"Start Game"),'on_new_game'))
-        self.menuItems.append((pygletfont.Text(self.font,"Resume Game"),'on_resume_game'))
-        self.menuItems.append((pygletfont.Text(self.font,"Credits"),'on_credits'))
-        self.menuItems.append((pygletfont.Text(self.font,"Exit"),'on_exit_program'))
+        self.menuItems.append(MenuItem(pygletfont.Text(self.font,"Start Game"),'on_new_game'))
+        self.menuItems.append(MenuItem(pygletfont.Text(self.font,"Resume Game"),'on_resume_game'))
+        self.menuItems.append(MenuItem(pygletfont.Text(self.font,"Credits"),'on_credits'))
+        self.menuItems.append(MenuItem(pygletfont.Text(self.font,"Exit"),'on_exit_program'))
         #maybe the following should be a separate method:
-        menuHeight = self.menuItems[0][0].height*(len(self.menuItems))
+        menuHeight = self.menuItems[0].height*(len(self.menuItems))
         topY = height - (height-menuHeight)/2
-        for item,action in self.menuItems:
-            item.y = topY
+        for item in self.menuItems:
+            item.setY(topY)
             topY -= item.height
-            item.x = (width-item.width)/2
+            item.setX((width-item.width)/2)
     
     def update(self,dt):
-        for item, action in self.menuItems:
+        for item in self.menuItems:
             item.draw()
         
     def on_key_press(self, symbol, modifiers):
-        if symbol == key.ENTER:
-            self.dispatch_event('on_new_game')
+        pass
     
     def on_mouse_press(self, x, y, button, modifiers):
         #find out which item was clicked
-        for item, action in self.menuItems:
-            if item.x < x and item.x+item.width > x and item.y < y and item.y+item.height > y:
-                self.dispatch_event(action)
+        for item in self.menuItems:
+            if item.on_click(x,y):
+                self.dispatch_event(item.action)
                 return True
 
 Menu.register_event_type('on_new_game')
