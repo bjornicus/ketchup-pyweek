@@ -12,7 +12,7 @@ class MenuItem(Widget):
     def draw(self):
         self.drawable.draw()
         
-    def do_click_action(self):
+    def do_click_action(self,x,y):
         return True
 
     def setX(self,x):
