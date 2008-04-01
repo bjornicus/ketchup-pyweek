@@ -2,10 +2,11 @@ from pyglet import event
 from pyglet import image
 import data
 
-# Timer duration in seconds.
-timerDuration = 5
 
 class Intro(event.EventDispatcher):
+    # Timer duration in seconds.
+    timerDuration = 5
+
     def __init__(self):
         # Reset timer.
         self.timerCurrent = 0
@@ -13,7 +14,7 @@ class Intro(event.EventDispatcher):
     def update(self,dt):
         self.image.blit(0,0)
         # Check for timer duration.
-        if self.timerCurrent > timerDuration:
+        if self.timerCurrent > self.timerDuration:
             self.finish()
         else:
             # Increment timer.
