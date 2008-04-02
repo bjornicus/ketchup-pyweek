@@ -37,8 +37,7 @@ class SoundManager:
     def playSFX(self, filename):
         self.stopSFX()
         self.lastSFX = filename
-        soundClip = self.loadSFX(self.lastSFX)
-        self.smSFX.queue(soundClip)
+        self.smSFX.queue(self.loadSFX(self.lastSFX))
         self.smSFX.play()
     
     def stopSFX(self):
