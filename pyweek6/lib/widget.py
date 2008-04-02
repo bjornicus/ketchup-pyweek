@@ -1,6 +1,7 @@
 
 class Widget(object):
-    def __init__(self,x,y,width,height):
+    def __init__(self,parent,x,y,width,height):
+        parent.children.append(self)
         self.x = x
         self.y = y
         self.width = width
