@@ -10,9 +10,10 @@ class Actor(event.EventDispatcher):
         
     
 class Conveyor(Actor, Widget): # should inherit from actors as well so we can call update
-    def __init__(self):
+    def __init__(self, parent):
         #find out how big the conveyor is and where it sits then call:
-        Widget.__init__(self,0,200,700,100)
+        Widget.__init__(self,parent, 0,200,700,100)
+        Actor.__init__(self)
 
     def do_click_action(self,x,y):
         print "clicked the conveyor at (%i,%i) " %(x,y)

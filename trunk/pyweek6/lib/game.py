@@ -6,9 +6,10 @@ from actors import *
 class Game(event.EventDispatcher):
     def __init__(self):
         self.actors = []
-        self.widgets = []
-        self.widgets.append(Conveyor())
-        
+        self.widgets = self.children = []
+        self.claw = Claw()
+        self.conveyor = Conveyor(self)
+
     def update(self,dt):
         for actor in self.actors:
             actor.update(dt)
