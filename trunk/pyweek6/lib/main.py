@@ -12,8 +12,11 @@ from credits import Credits
 from pyglet import window
 from pyglet import clock
 from pyglet import event
+from pyglet.gl import *
 
 win = window.Window(width=800, height=600, resizable=False)
+glEnable(GL_BLEND)
+glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
 
 # this for debugging,
 # uncomment if you want to see all events output ot the terminal
