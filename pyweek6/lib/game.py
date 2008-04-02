@@ -42,6 +42,8 @@ class Game(event.EventDispatcher):
         actor.push_handlers(self)
         actor.push_handlers(self.claw)
         self.actors.append(actor)
+        if isinstance(actor, ClickableActor):
+            actor.push_handlers(self.claw)
     
     def remove_actor(self, actor):
         actors.remove(actor)
