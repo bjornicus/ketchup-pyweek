@@ -1,6 +1,6 @@
 from pyglet import event
 from pyglet.window import key
-#from widget import Widget
+from pyglet import image
 from actors import *
 import data
 """
@@ -21,6 +21,7 @@ class Game(event.EventDispatcher):
     def __init__(self):
         self.actors = []
         self.widgets = self.children = []
+        self.background = image.load(data.filepath("game_background.jpg"))
         self.claw = Claw('dummy.png')
         self.add_actor(self.claw)
         self.add_actor(Conveyor(self,'dummy.png'))
@@ -32,6 +33,7 @@ class Game(event.EventDispatcher):
         self.add_actor(Clock('dummy.png'))
 
     def update(self,dt):
+        self.background.blit(0,0)
         for actor in self.actors:
             actor.update(dt)
 
@@ -49,6 +51,7 @@ class Game(event.EventDispatcher):
 
     def on_mouse_press(self, x, y, button, modifiers):
         #find out which item was clicked
+        print "click (%i,%i)" %(x,y)
         for item in self.widgets:
             if item.on_click(x,y):
                 return True
