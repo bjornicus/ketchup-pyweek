@@ -39,4 +39,4 @@ class ClickableActor(Actor, Widget):
         glColor3f(1, 0, 0) # red
         glRectf(self.x, self.y, self.x+self.width, self.y+self.height) 
         glColor3f(1, 1, 1) 
-        Actor.draw()
+        Actor.draw(self)
