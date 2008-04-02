@@ -8,18 +8,26 @@ class Actor(event.EventDispatcher):
         self.image = image.ImageGrid(myimage, xframes, yframes)
         self.x = x
         self.y = y
-        self.xframes = xframes
-        self.yframes = yframes
+        #self.xframes = xframes
+        #self.yframes = yframes
         self.currentFrame = 0
+        self.frameRange = xframes * yframes
         
     def draw(self):
         self.image[self.currentFrame].blit(self.x,self.y)
         
     def move(self, dx, dy):
-    	self.x += dx
-    	self.y += dy
-    	
+        self.x += dx
+        self.y += dy
+        
     def update(self,dt):
-    	self.draw()
-
+        self.draw()
+        
+    def changeFrame(self,newFrame):
+        if(newFrame < self.frameRange):
+            self.currentFrame = newFrame
+        
+    def destroy(self):
+        self.dispatch_event('remove_actor', self)    
+        
 Actor.register_event_type('remove_actor')
