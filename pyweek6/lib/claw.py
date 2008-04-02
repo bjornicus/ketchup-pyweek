@@ -10,7 +10,7 @@ class Claw(Actor):
         
     def widget_clicked(self, clickable):
         print "event caught!"
-        return true
+        return True
    
     def update(self,dt):
         self.draw()
