@@ -22,15 +22,15 @@ class Game(event.EventDispatcher):
         self.actors = []
         self.widgets = self.children = []
         self.background = image.load(data.filepath("Env09.png"))
-        self.claw = Claw('dummy.png')
+        self.claw = Claw()
         self.add_actor(self.claw)
         self.add_actor(Conveyor(self))
         self.add_actor(PartsBin(self,'dummy.png',32,22,188,60)) #for heads
         self.add_actor(PartsBin(self,'dummy.png',240,22,188,60)) #for torsos 
         self.add_actor(PartsBin(self,'dummy.png',444,22,188,60)) #for legs
-        #self.add_actor(RandomPartGenerator())
-        self.add_actor(FinishedBin(self,'dummy.png'))
-        self.add_actor(Clock('dummy.png'))
+        self.add_actor(RandomPartGenerator())
+        self.add_actor(FinishedBin(self))
+        self.add_actor(Clock())
 
     def update(self,dt):
         self.background.blit(0,0)
