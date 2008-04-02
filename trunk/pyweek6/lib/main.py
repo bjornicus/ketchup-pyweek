@@ -18,6 +18,7 @@ from pyglet.gl import *
 win = window.Window(width=800, height=600, resizable=False)
 glEnable(GL_BLEND)
 glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
+soundManager = SoundManager()
 
 # this for debugging,
 # uncomment if you want to see all events output ot the terminal
@@ -26,15 +27,16 @@ glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
 
 
 def main():
-    
     stateManager = StateManager()
-    stateManager.soundManager.playMusic(stateManager.soundManager.defaultMusic)
+    soundManager.playMusic()
     while not win.has_exit:
         win.dispatch_events()
         win.clear()
         dt = clock.tick()
         stateManager.update(dt)
         win.flip()
+        soundManager.buffer()
+
 
 class StateManager(object):
     def __init__(self):
@@ -50,15 +52,12 @@ class StateManager(object):
         self.credits = Credits()
         self.credits.push_handlers(self)
         
-        self.soundManager = SoundManager()
-        
         #change this back to intro before we ship!
         self.currentState = self.game
         win.push_handlers(self.game)
     
     def update(self, dt):
         self.currentState.update(dt)
-        self.soundManager.bufferMusic()
         
     def show_menu(self):
         win.pop_handlers()
@@ -89,7 +88,7 @@ class StateManager(object):
         win.push_handlers(self.credits)
         
     def on_play_music(self):
-        self.soundManager.playMusic(self.soundManager.defaultMusic)
+        soundManager.playMusic()
         
     def on_exit_program(self):
         win.has_exit = True
