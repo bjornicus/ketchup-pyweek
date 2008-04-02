@@ -24,7 +24,7 @@ class Game(event.EventDispatcher):
         self.background = image.load(data.filepath("game_background.jpg"))
         self.claw = Claw('dummy.png')
         self.add_actor(self.claw)
-        self.add_actor(Conveyor(self,'dummy.png'))
+        self.add_actor(Conveyor(self))
         self.add_actor(PartsBin(self,'dummy.png')) #for heads
         self.add_actor(PartsBin(self,'dummy.png')) #for torsos 
         self.add_actor(PartsBin(self,'dummy.png')) #for legs
