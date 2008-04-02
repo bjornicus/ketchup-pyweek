@@ -21,7 +21,7 @@ class Game(event.EventDispatcher):
     def __init__(self):
         self.actors = []
         self.widgets = self.children = []
-        self.background = image.load(data.filepath("game_background.jpg"))
+        self.background = image.load(data.filepath("Env09.png"))
         self.claw = Claw('dummy.png')
         self.add_actor(self.claw)
         self.add_actor(Conveyor(self))
