@@ -48,8 +48,9 @@ class StateManager(object):
         self.credits = Credits()
         self.credits.push_handlers(self)
         
-        self.currentState = self.intro
-        win.push_handlers(self.intro)
+        #change this back to intro before we ship!
+        self.currentState = self.game
+        win.push_handlers(self.game)
     
     def update(self, dt):
         self.currentState.update(dt)

@@ -36,7 +36,7 @@ class ClickableActor(Actor, Widget):
         Actor.__init__(self,imageName,x,y,xframes,yframes)
     
     def draw(self):
-        glColor3f(1, 0, 0) # red
+        glColor4f(1, 0, 0, .5) # red
         glRectf(self.x, self.y, self.x+self.width, self.y+self.height) 
-        glColor3f(1, 1, 1) 
-        Actor.draw(self)
+        glColor4f(1, 1, 1, 1) 
+        #Actor.draw(self)

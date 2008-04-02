@@ -4,7 +4,7 @@ from actor import Actor
     
 class Conveyor(ClickableActor): # should inherit from actors as well so we can call update
     def __init__(self, parent):
-        ClickableActor.__init__(self, parent, 'dummy.png', x=0, y=170, width=630, height=85)
+        ClickableActor.__init__(self, parent, 'dummy.png', x=0, y=200, width=630, height=80)
 
     def do_click_action(self,x,y):
         print "clicked the conveyor at (%i,%i) " %(x,y)
@@ -18,12 +18,12 @@ class Claw(Actor):
         Actor.__init__(self,imageName)
     
 class PartsBin(ClickableActor):
-    def __init__(self,parent, imageName):
-        ClickableActor.__init__(self, parent, imageName)
+    def __init__(self,parent, imageName,x,y,width,height):
+        ClickableActor.__init__(self, parent, imageName, x, y, width, height)
     
 class FinishedBin(ClickableActor):
     def __init__(self,parent, imageName): 
-        ClickableActor.__init__(self, parent, imageName)
+        ClickableActor.__init__(self, parent, imageName,x=630, y=340, width=150, height=110)
 
 class Clock(Actor):
     def __init__(self, imageName):
