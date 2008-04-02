@@ -31,12 +31,14 @@ class Widget(object):
         return False
 
 class ClickableActor(Actor, Widget):
-    def __init__(self,parent, imageName, x=0, y=0, width=1, height=1, xframes = 1, yframes = 1):
+    def __init__(self,parent, imageName="dummy.png", x=0, y=0, width=1, height=1, xframes = 1, yframes = 1):
         Widget.__init__(self,parent,x,y,width,height)
         Actor.__init__(self,imageName,x,y,xframes,yframes)
     
     def draw(self):
-        glColor4f(1, 0, 0, .5) # red
+        glColor4f(1, 0, 0, .3) # red
         glRectf(self.x, self.y, self.x+self.width, self.y+self.height) 
+        glColor4f(1, 1, 1, .5) 
+        Actor.draw(self)
         glColor4f(1, 1, 1, 1) 
-        #Actor.draw(self)
+
