@@ -2,13 +2,14 @@ from pyglet import event
 from pyglet.window import key
 #from widget import Widget
 from actors import *
+import data
 
 class Game(event.EventDispatcher):
     def __init__(self):
         self.actors = []
         self.widgets = self.children = []
-        self.claw = Claw()
-        self.conveyor = Conveyor(self)
+        self.claw = Claw('dummy.png')
+        self.conveyor = Conveyor(self,'dummy.png')
 
     def update(self,dt):
         for actor in self.actors:

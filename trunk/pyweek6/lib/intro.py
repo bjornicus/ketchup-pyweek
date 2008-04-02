@@ -1,5 +1,6 @@
 from pyglet import event
 from pyglet import image
+from actor import Actor
 import data
 
 
