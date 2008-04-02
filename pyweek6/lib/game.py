@@ -38,6 +38,9 @@ class Game(event.EventDispatcher):
     def add_actor(self, actor):
         actor.push_handlers(self)
         self.actors.append(actor)
+    
+    def remove_actor(self, actor):
+        actors.remove(actor)
 
     def on_key_press(self, symbol, modifiers):
         if symbol == key.ESCAPE:
