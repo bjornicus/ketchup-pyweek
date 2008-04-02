@@ -1,7 +1,7 @@
 from pyglet import event
 from pyglet.window import key
-from widget import Widget
-#from actors import *
+#from widget import Widget
+from actors import *
 
 class Game(event.EventDispatcher):
     def __init__(self):
@@ -26,12 +26,3 @@ class Game(event.EventDispatcher):
 
 Game.register_event_type('on_pause')
 Game.register_event_type('on_quit')
-
-#this maybe should move to actors.py, but it doesn't exist yet :D
-class Conveyor(Widget): # should inherit from actors as well so we can call update
-    def __init__(self):
-        #find out how big the conveyor is and where it sits then call:
-        Widget.__init__(self,0,200,700,100)
-
-    def do_click_action(self,x,y):
-        print "clicked the conveyor at (%i,%i) " %(x,y)
