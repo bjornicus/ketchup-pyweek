@@ -40,6 +40,7 @@ class Game(event.EventDispatcher):
 
     def add_actor(self, actor):
         actor.push_handlers(self)
+        actor.push_handlers(self.claw)
         self.actors.append(actor)
     
     def remove_actor(self, actor):
