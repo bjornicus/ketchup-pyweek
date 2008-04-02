@@ -1,6 +1,8 @@
+from actor import Actor
+from pyglet.gl import *
 
 class Widget(object):
-    def __init__(self,parent,x=0,y=0,width=0,height=0):
+    def __init__(self,parent,x,y,width,height):
         parent.children.append(self)
         self.x = x
         self.y = y
@@ -27,3 +29,13 @@ class Widget(object):
     #override this method in inherited class
     def do_click_action(self,x,y):
         return False
+
+class ClickableActor(Actor, Widget):
+    def __init__(self,parent, imageName, x=0, y=0, width=1, height=1, xframes = 1, yframes = 1):
+        Widget.__init__(self,parent,x,y,width,height)
+        Actor.__init__(self,imageName,x,y,xframes,yframes)
+    
+    def draw(self):
+        glColor3f(1, 0, 0) # red
+        glRectf(self.x, self.y, self.x+self.width, self.y+self.height) 
+        glColor3f(1, 1, 1) 
