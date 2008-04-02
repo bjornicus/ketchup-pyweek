@@ -28,7 +28,7 @@ soundManager = SoundManager()
 
 def main():
     stateManager = StateManager()
-    soundManager.playMusic()
+    soundManager.playMusic(soundManager.defaultMusic)
     while not win.has_exit:
         win.dispatch_events()
         win.clear()
@@ -87,8 +87,17 @@ class StateManager(object):
         self.currentState = self.credits
         win.push_handlers(self.credits)
         
-    def on_play_music(self):
-        soundManager.playMusic()
+    def on_play_music(self, filename = soundManager.defaultMusic):
+        soundManager.playMusic(filename)
+        
+    def on_stop_music(self):
+        soundManager.stopMusic()
+        
+    def on_play_sfx(self, filename):
+        soundManager.playSFX(filename)
+        
+    def on_stop_sfx(self):
+        soundManager.stopSFX()
         
     def on_exit_program(self):
         win.has_exit = True
