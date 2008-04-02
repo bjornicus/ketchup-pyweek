@@ -42,10 +42,11 @@ class StateManager(object):
         self.game = Game()
         self.game.push_handlers(self)
         
+        self.credits = Credits()
+        self.credits.push_handlers(self)
+        
         self.currentState = self.intro
         win.push_handlers(self.intro)
-        
-        self.credits = Credits()
     
     def update(self, dt):
         self.currentState.update(dt)
@@ -74,7 +75,9 @@ class StateManager(object):
         self.show_menu()
         
     def on_credits(self):
+    	win.pop_handlers()
         self.currentState = self.credits
+        win.push_handlers(self.credits)
         
     def on_exit_program(self):
         win.has_exit = True

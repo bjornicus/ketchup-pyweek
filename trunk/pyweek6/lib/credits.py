@@ -17,7 +17,7 @@ class Credits(event.EventDispatcher):
         sx = 250
         sy = -text_size
         for line in fileinput.input(data.filepath("credits.txt")):
-            self.textList.append(pygletfont.Text(self.font, line, x = 800 / 2, y = sy, color = [1.0,0.0,0.0,1.0], halign = pygletfont.Text.CENTER))
+            self.textList.append(pygletfont.Text(self.font, line, x = 800 / 2, y = sy, halign = pygletfont.Text.CENTER))
             sy -= text_offset
         
     def update(self,dt):
@@ -30,5 +30,7 @@ class Credits(event.EventDispatcher):
         
     def on_key_press(self, symbol, modifiers):
         if symbol == key.ESCAPE:
-            self.dispatch_event('on_quit')
+            self.dispatch_event('on_intro_finish')
             return True
+            
+Credits.register_event_type("on_intro_finish")
