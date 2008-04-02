@@ -12,16 +12,24 @@ class Conveyor(Actor, Widget): # should inherit from actors as well so we can ca
         print "clicked the conveyor at (%i,%i) " %(x,y)
 
 class Robot(Actor, Widget):
-    pass
+    def __init__(self,parent, imageName):
+        Actor.__init__(self,imageName)
+        Widget.__init__(self,parent)
     
 class Claw(Actor):
-    pass
+    def __init__(self, imageName):
+        Actor.__init__(self,imageName)
     
 class PartsBin(Actor, Widget):
-    pass
+    def __init__(self,parent, imageName):
+        Actor.__init__(self,imageName)
+        Widget.__init__(self,parent)
     
-class FinishedRobotShelf(Widget): #this may need a better name
-    pass
+class FinishedBin(Actor, Widget):
+    def __init__(self,parent, imageName): 
+        Actor.__init__(self,imageName)
+        Widget.__init__(self,parent)
 
 class Clock(Actor):
-    pass
+    def __init__(self, imageName):
+        Actor.__init__(self,imageName)

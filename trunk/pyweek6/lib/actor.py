@@ -21,3 +21,5 @@ class Actor(event.EventDispatcher):
     	
     def update(self,dt):
     	self.draw()
+
+Actor.register_event_type('remove_actor')
