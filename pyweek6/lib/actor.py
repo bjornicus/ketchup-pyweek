@@ -3,13 +3,11 @@ from pyglet import event
 import data
 
 class Actor(event.EventDispatcher):
-    def __init__(self, imageName, x = 0, y = 0, xframes = 1, yframes = 1):
+    def __init__(self, imageName = 'dummy.png', x = 0, y = 0, xframes = 1, yframes = 1):
         myimage = image.load(data.filepath(imageName))
         self.image = image.ImageGrid(myimage, xframes, yframes)
         self.x = x
         self.y = y
-        #self.xframes = xframes
-        #self.yframes = yframes
         self.currentFrame = 0
         self.frameRange = xframes * yframes
         
