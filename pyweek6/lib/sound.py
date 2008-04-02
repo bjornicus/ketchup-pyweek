@@ -16,12 +16,15 @@ class SoundManager:
     
     # Streaming Music
     def playMusic(self, filename = defaultMusic):
-        self.stopMusic()
-        self.playingMusic = True
-        self.lastMusic = filename
-        musicCD = media.load(data.filepath(filename))
-        self.smMusic.queue(musicCD)
-        self.smMusic.play()
+        try:
+            self.stopMusic()
+            self.playingMusic = True
+            self.lastMusic = filename
+            musicCD = media.load(data.filepath(filename))
+            self.smMusic.queue(musicCD)
+            self.smMusic.play()
+        except media.MediaFormatException:
+            pass
     
     def stopMusic(self):
         self.playingMusic = False
@@ -31,14 +34,17 @@ class SoundManager:
     # Cached SFX
     def loadSFX(self, filename):
         if not self.dictSFX.has_key(filename):
-            self.dictSFX[filename] = media.load(data.filepath(filename))
+            self.dictSFX[filename] = media.load(data.filepath(filename), None, False)
         return self.dictSFX[filename]
     
     def playSFX(self, filename):
-        self.stopSFX()
-        self.lastSFX = filename
-        self.smSFX.queue(self.loadSFX(self.lastSFX))
-        self.smSFX.play()
+        try:
+            self.stopSFX()
+            self.lastSFX = filename
+            self.smSFX.queue(self.loadSFX(self.lastSFX))
+            self.smSFX.play()
+        except media.MediaFormatException:
+            pass
     
     def stopSFX(self):
         self.smSFX.pause()
