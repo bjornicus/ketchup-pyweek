@@ -2,6 +2,7 @@ from pyglet import event
 from pyglet.window import key
 from pyglet import image
 from actors import *
+from claw import Claw
 import data
 """
 at the start of the game we need (as for as actors): 
@@ -22,7 +23,7 @@ class Game(event.EventDispatcher):
         self.actors = []
         self.widgets = self.children = []
         self.background = image.load(data.filepath("Env09.png"))
-        self.claw = Claw()
+        self.claw = Claw('claw.png')
         self.add_actor(self.claw)
         self.add_actor(Conveyor(self))
         self.add_actor(PartsBin(self,'dummy.png',32,22,188,60)) #for heads

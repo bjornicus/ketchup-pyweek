@@ -5,7 +5,8 @@ import data
 class Actor(event.EventDispatcher):
     def __init__(self, imageName = 'dummy.png', x = 0, y = 0, xframes = 1, yframes = 1):
         myimage = image.load(data.filepath(imageName))
-        self.image = image.ImageGrid(myimage, xframes, yframes)
+        imageGrid = image.ImageGrid(myimage, yframes, xframes)
+        self.image = image.TextureGrid(imageGrid)
         self.x = x
         self.y = y
         self.currentFrame = 0

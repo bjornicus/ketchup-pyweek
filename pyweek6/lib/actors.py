@@ -13,10 +13,6 @@ class Robot(ClickableActor):
     def __init__(self,parent, imageName):
         ClickableActor.__init__(self, parent, imageName)
     
-class Claw(Actor):
-    def __init__(self):
-        Actor.__init__(self,imageName='dummy.png', x=200,y=400)
-    
 class PartsBin(ClickableActor):
     def __init__(self,parent,imageName,x,y,width,height):
         ClickableActor.__init__(self, parent, imageName, x, y, width, height)
