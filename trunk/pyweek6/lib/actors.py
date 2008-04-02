@@ -8,6 +8,7 @@ class Conveyor(ClickableActor): # should inherit from actors as well so we can c
 
     def do_click_action(self,x,y):
         print "clicked the conveyor at (%i,%i) " %(x,y)
+        ClickableActor.do_click_action(self,x,y)
 
 class Robot(ClickableActor):
     def __init__(self,parent, imageName):

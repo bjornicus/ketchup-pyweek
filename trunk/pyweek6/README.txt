@@ -11,6 +11,7 @@ You will need these installed in order to run the game:
 
   Python:     http://www.python.org/
   pyglet:     http://www.pygame.org/
+  avbin:      http://code.google.com/p/avbin/ (at least for linux maybe not for windows)
 
 RUNNING THE GAME:
 
