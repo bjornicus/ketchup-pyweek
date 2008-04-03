@@ -1,4 +1,5 @@
 from pyglet import event
+from pyglet import clock
 from widget import ClickableActor
 from actor import Actor
 from pyglet.gl import *
@@ -32,6 +33,12 @@ class Robot(ClickableActor):
         glRectf(self.x, self.y, self.x+self.width, self.y+self.height) 
         glColor4f(1, 1, 1, .5) 
         glColor4f(1, 1, 1, 1) 
+        if self.head:
+            self.head.draw()
+        if self.body:
+            self.body.draw()
+        if self.feet:
+            self.feet.draw()
         
     def attach_part(self,part):
         if (part.type == 'head'):
@@ -63,8 +70,19 @@ class FinishedBin(ClickableActor):
         ClickableActor.__init__(self, parent,x=630, y=340, width=150, height=110)
 
 class RandomPartGenerator(Actor):
-    def __init__(self):
+    def __init__(self, conveyor):
         Actor.__init__(self,y=370)
+        self.targetConveyor = conveyor
+        clock.schedule_once(self.make_part, 1.0)
+    def make_part(self,dt):
+        # -- begin test robot -- #
+        testRobot = Robot(self.targetConveyor, self.x,self.y)
+        testRobot.attach_part(RobotPart('head',1))
+        testRobot.attach_part(RobotPart('body',2))
+        testRobot.attach_part(RobotPart('feet',3))
+        self.dispatch_event('add_actor',testRobot)
+        # -- end test robot -- #
+RandomPartGenerator.register_event_type('add_actor')
 
 class Clock(Actor):
     def __init__(self):

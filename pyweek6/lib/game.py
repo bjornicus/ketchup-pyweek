@@ -25,24 +25,14 @@ class Game(event.EventDispatcher):
         self.background = image.load(data.filepath("Env09.png"))
         self.claw = Claw('claw.png')
         self.add_actor(self.claw)
-        self.add_actor(Conveyor(self))
+        conveyor = Conveyor(self)
+        self.add_actor(conveyor)
         self.add_actor(PartsBin(self,'dummy.png',32,22,188,60)) #for heads
         self.add_actor(PartsBin(self,'dummy.png',240,22,188,60)) #for torsos 
         self.add_actor(PartsBin(self,'dummy.png',444,22,188,60)) #for legs
-        self.add_actor(RandomPartGenerator())
+        self.add_actor(RandomPartGenerator(conveyor))
         self.add_actor(FinishedBin(self))
-        self.add_actor(Clock())
-        # -- begin test robot -- #
-        testRobot = Robot(self, 300,200)
-        testRobot.attach_part(RobotPart('head',1))
-        testRobot.attach_part(RobotPart('body',2))
-        testRobot.attach_part(RobotPart('feet',3))
-        self.add_actor(testRobot)
-        self.add_actor(testRobot.head)
-        self.add_actor(testRobot.body)
-        self.add_actor(testRobot.feet)
-        # -- end test robot -- #
-        
+        self.add_actor(Clock())        
 
     def update(self,dt):
         self.background.blit(0,0)
