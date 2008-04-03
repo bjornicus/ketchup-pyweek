@@ -178,7 +178,3 @@ class RandomPartGenerator(Actor):
                 self.currentRobot = None
     
 RandomPartGenerator.register_event_type('add_actor')
-
-class Clock(Actor):
-    def __init__(self):
-        Actor.__init__(self,x=632,y=450)

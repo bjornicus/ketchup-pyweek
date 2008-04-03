@@ -3,6 +3,7 @@ from pyglet.window import key
 from pyglet import image
 from actors import *
 from claw import Claw
+from hud import HUD
 import data
 """
 at the start of the game we need (as for as actors): 
@@ -34,7 +35,7 @@ class Game(event.EventDispatcher):
         self.add_actor(PartsBin(self,'legs',444,22,188,100))
         self.add_actor(RandomPartGenerator(conveyor))
         self.add_actor(FinishedBin(self))
-        self.add_actor(Clock())        
+        self.add_actor(HUD())
 
     def update(self,dt):
         self.background.blit(0,0)
