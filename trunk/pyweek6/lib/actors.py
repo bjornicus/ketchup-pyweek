@@ -77,22 +77,32 @@ class Robot(ClickableActor):
             if self.head is not None:
                 return False
             self.head = part
-            part.y = self.y + 128
             part.x = self.x - 32
         if (part.type == 'body'):
             if self.body is not None:
                 return False
             self.body = part
-            part.y = self.y + 64
             part.x = self.x
         if (part.type == 'legs'):
             if self.legs is not None:
                 return False
             self.legs = part
-            part.y = self.y
             part.x = self.x
+        part.y = self.y
+        self.update_stacking()
         self.parts.append(part)
         return True
+    def update_stacking(self):
+        legheight = bodyheight = headheight = 0
+        if self.legs:
+            legheight = self.legs.image.height
+        if self.body:
+            bodyheight = self.body.image.height
+            self.body.y = self.y + legheight
+        if self.head:
+            headheight = self.head.image.height
+            self.head.y = self.y + legheight + bodyheight
+        self.height = legheight+bodyheight+headheight
     
 class PartsBin(ClickableActor):
     def __init__(self,parent,imageName,x,y,width,height):
@@ -111,10 +121,11 @@ class RandomPartGenerator(Actor):
     def make_part(self,dt):
         if self.currentRobot:
             return
-        type = random.choice(('head','body','legs'))
-        flavor = random.choice((1,2,3))
         newrobot = Robot(self.targetConveyor, self.x,self.y)
-        newrobot.attach_part(RobotPart(type,flavor))
+        for i in range(2):
+            type = random.choice(('head','body','legs'))
+            flavor = random.choice((1,2,3))
+            newrobot.attach_part(RobotPart(type,flavor))
         self.dispatch_event('add_actor',newrobot)
         self.currentRobot = newrobot
     def update(self,dt):
