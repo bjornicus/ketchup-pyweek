@@ -16,7 +16,7 @@ class RobotPart(Actor):
                 'body':{1:'RedBody1.png', 2:'BlueBody2.png',3:'GreenBody3.png'},
                 'feet':{1:'RedLegs1.png', 2:'BlueLegs2.png',3:'GreenLegs3.png'}}
     def __init__(self, type, flavor):
-        Actor.__init__(self, parent, RobotPart.partlist[type][flavor])
+        Actor.__init__(self, RobotPart.partlist[type][flavor])
         self.type = type
         self.flavor = flavor
         
@@ -33,23 +33,25 @@ class Robot(ClickableActor):
         glColor4f(1, 1, 1, .5) 
         glColor4f(1, 1, 1, 1) 
         
-    def attachPart(self,part):
+    def attach_part(self,part):
         if (part.type == 'head'):
             if self.head is not None:
                 return False
             self.head = part
             part.y = self.y + 128
+            part.x = self.x - 32
         if (part.type == 'body'):
             if self.body is not None:
                 return False
             self.body = part
             part.y = self.y + 64
+            part.x = self.x
         if (part.type == 'feet'):
             if self.feet is not None:
                 return False
             self.feet = part
             part.y = self.y
-        part.x = self.x
+            part.x = self.x
         return True
     
 class PartsBin(ClickableActor):
