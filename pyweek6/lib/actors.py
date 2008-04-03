@@ -5,12 +5,18 @@ from actor import Actor
 from pyglet.gl import *
     
 class Conveyor(ClickableActor): # should inherit from actors as well so we can call update
+    SPEED = 10. #pixels per second
     def __init__(self, parent):
         ClickableActor.__init__(self, parent, 'dummy.png', x=0, y=200, width=630, height=80)
 
     def do_click_action(self,x,y):
         print "clicked the conveyor at (%i,%i) " %(x,y)
         ClickableActor.do_click_action(self,x,y)
+        
+    def update(self,dt):
+        ClickableActor.update(self,dt)
+        for robot in self.children:
+            robot.move(Conveyor.SPEED*dt,0)
 
 class RobotPart(Actor):
     partlist = {'head':{1:'RedHead1.png', 2:'BlueHead2.png',3:'GreenHead3.png'}, 
@@ -27,18 +33,19 @@ class Robot(ClickableActor):
         self.head = None
         self.body = None
         self.feet = None
-        
+        self.parts = []
+    
+    def move(self, dx, dy):
+        Actor.move(self,dx,dy)
+        for part in self.parts:
+            part.move(dx,dy)
     def draw(self): # we don't actually draw the robot, it just holds the parts
         glColor4f(1, 0, 0, .3) # red
         glRectf(self.x, self.y, self.x+self.width, self.y+self.height) 
         glColor4f(1, 1, 1, .5) 
         glColor4f(1, 1, 1, 1) 
-        if self.head:
-            self.head.draw()
-        if self.body:
-            self.body.draw()
-        if self.feet:
-            self.feet.draw()
+        for part in self.parts:
+            part.draw()
         
     def attach_part(self,part):
         if (part.type == 'head'):
@@ -59,6 +66,7 @@ class Robot(ClickableActor):
             self.feet = part
             part.y = self.y
             part.x = self.x
+        self.parts.append(part)
         return True
     
 class PartsBin(ClickableActor):
@@ -73,8 +81,11 @@ class RandomPartGenerator(Actor):
     def __init__(self, conveyor):
         Actor.__init__(self,y=370)
         self.targetConveyor = conveyor
+        self.currentRobot = None
         clock.schedule_once(self.make_part, 1.0)
     def make_part(self,dt):
+        if self.currentRobot:
+            return
         # -- begin test robot -- #
         testRobot = Robot(self.targetConveyor, self.x,self.y)
         testRobot.attach_part(RobotPart('head',1))
@@ -82,6 +93,13 @@ class RandomPartGenerator(Actor):
         testRobot.attach_part(RobotPart('feet',3))
         self.dispatch_event('add_actor',testRobot)
         # -- end test robot -- #
+        self.currentRobot = testRobot
+    def update(self,dt):
+        Actor.update(self,dt)
+        if self.currentRobot:
+            self.currentRobot.move(0,-500.*dt)
+            if self.currentRobot.y < self.targetConveyor.y + 10:
+                self.currentRobot = None
 RandomPartGenerator.register_event_type('add_actor')
 
 class Clock(Actor):
