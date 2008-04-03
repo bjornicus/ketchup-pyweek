@@ -47,11 +47,16 @@ class Claw(Actor):
         
     def finishTracking(self):
         if isinstance(self.target,Robot):
-            self.changeFrame(1)
-            self.target.parent.children.remove(self.target)
-            self.target.parent = None
-            self.heldTarget = self.target
-            self.holding = True
+            if self.heldTarget == None:
+                self.changeFrame(1)
+                self.target.parent.children.remove(self.target)
+                self.target.parent = None
+                self.heldTarget = self.target
+                self.holding = True
+            elif self.target.connect(self.heldTarget):
+                self.heldTarget.dispatch_event('remove_actor',self.heldTarget)
+                self.heldTarget = None
+                self.changeFrame(0)
             
         self.target = None
         self.tracking = False
