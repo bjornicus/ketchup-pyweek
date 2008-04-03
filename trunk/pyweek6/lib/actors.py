@@ -8,7 +8,7 @@ import random
 FALLSPEED = 500.
 
 class Conveyor(ClickableActor): # should inherit from actors as well so we can call update
-    SPEED = 50. #pixels per second
+    SPEED = 30. #pixels per second
     def __init__(self, parent):
         ClickableActor.__init__(self, parent, 'dummy.png', x=0, y=200, width=730, height=80)
 
@@ -158,6 +158,7 @@ class RandomPartGenerator(Actor):
         Actor.__init__(self,y=370)
         self.targetConveyor = conveyor
         self.currentRobot = None
+        clock.schedule_once(self.make_part,0.1)
         clock.schedule_interval(self.make_part, 5.0)
     def make_part(self,dt):
         if self.currentRobot:
