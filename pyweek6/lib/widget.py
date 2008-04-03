@@ -14,7 +14,7 @@ class Widget(object):
         if not self.contains_point(x,y):
             return False
         for child in self.children:
-            if child.on_click:
+            if child.on_click(x,y):
                 return True
         # the children didn't consume the click so take action
         return self.do_click_action(x,y)

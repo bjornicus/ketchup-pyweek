@@ -3,6 +3,7 @@ from pyglet import clock
 from widget import ClickableActor
 from actor import Actor
 from pyglet.gl import *
+import random
     
 FALLSPEED = 500.
 
@@ -45,7 +46,7 @@ class RecycleBin(Actor):
 class RobotPart(Actor):
     partlist = {'head':{1:'RedHead1.png', 2:'BlueHead2.png',3:'GreenHead3.png'}, 
                 'body':{1:'RedBody1.png', 2:'BlueBody2.png',3:'GreenBody3.png'},
-                'feet':{1:'RedLegs1.png', 2:'BlueLegs2.png',3:'GreenLegs3.png'}}
+                'legs':{1:'RedFeet1.png', 2:'BlueLegs02.png',3:'GreenLegs3.png'}}
     def __init__(self, type, flavor):
         Actor.__init__(self, RobotPart.partlist[type][flavor])
         self.type = type
@@ -56,7 +57,7 @@ class Robot(ClickableActor):
         ClickableActor.__init__(self, parent, x=x, y=y, width=64, height=192)
         self.head = None
         self.body = None
-        self.feet = None
+        self.legs = None
         self.parts = []
     
     def move(self, dx, dy):
@@ -84,10 +85,10 @@ class Robot(ClickableActor):
             self.body = part
             part.y = self.y + 64
             part.x = self.x
-        if (part.type == 'feet'):
-            if self.feet is not None:
+        if (part.type == 'legs'):
+            if self.legs is not None:
                 return False
-            self.feet = part
+            self.legs = part
             part.y = self.y
             part.x = self.x
         self.parts.append(part)
@@ -106,18 +107,16 @@ class RandomPartGenerator(Actor):
         Actor.__init__(self,y=370)
         self.targetConveyor = conveyor
         self.currentRobot = None
-        clock.schedule_once(self.make_part, 1.0)
+        clock.schedule_interval(self.make_part, 5.0)
     def make_part(self,dt):
         if self.currentRobot:
             return
-        # -- begin test robot -- #
-        testRobot = Robot(self.targetConveyor, self.x,self.y)
-        testRobot.attach_part(RobotPart('head',1))
-        testRobot.attach_part(RobotPart('body',2))
-        testRobot.attach_part(RobotPart('feet',3))
-        self.dispatch_event('add_actor',testRobot)
-        # -- end test robot -- #
-        self.currentRobot = testRobot
+        type = random.choice(('head','body','legs'))
+        flavor = random.choice((1,2,3))
+        newrobot = Robot(self.targetConveyor, self.x,self.y)
+        newrobot.attach_part(RobotPart(type,flavor))
+        self.dispatch_event('add_actor',newrobot)
+        self.currentRobot = newrobot
     def update(self,dt):
         Actor.update(self,dt)
         if self.currentRobot:
