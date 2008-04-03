@@ -12,7 +12,7 @@ class Claw(Actor):
         self.holding = False
         self.target = None
         self.heldTarget = None
-        self.speed = 60.0
+        self.speed = 80.0
         self.dir = 0
         self.xspeed = 0
         self.yspeed = 0
@@ -67,15 +67,21 @@ class Claw(Actor):
         selfHighY = self.y + self.image[0].height
         
         distance = self.target.x - self.x
-        self.xdir = distance/abs(distance)
-        self.xspeed = speed * self.xdir
+        if distance == 0:
+            self.xdir = 0
+        else:
+            self.xdir = distance/abs(distance)
+        self.xspeed = min(speed,abs(distance)) * self.xdir
         
         distance = targetHighY - selfHighY
-        self.ydir = distance/abs(distance)
-        self.yspeed = speed * self.ydir
+        if distance == 0:
+            self.ydir = 0
+        else:
+            self.ydir = distance/abs(distance)
+        self.yspeed = min(speed,abs(distance)) * self.ydir
         
         self.move(self.xspeed,self.yspeed)
-        if( abs(self.target.x - self.x) < 0.3 and abs(targetHighY - selfHighY) < 0.3 ):
+        if( abs(self.target.x - self.x) < 1 and abs(targetHighY - selfHighY) < 1 ):
             self.finishTracking()
             
     def returnToTop(self,dt):
