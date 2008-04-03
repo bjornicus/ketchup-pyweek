@@ -24,7 +24,8 @@ class SoundManager:
             self.smMusic.queue(musicCD)
             self.smMusic.play()
         except media.MediaFormatException:
-            pass
+            print "Media Format Exception:"
+            print media.MediaFormatException
     
     def stopMusic(self):
         self.playingMusic = False
@@ -33,9 +34,13 @@ class SoundManager:
     
     # Cached SFX
     def loadSFX(self, filename):
-        if not self.dictSFX.has_key(filename):
-            self.dictSFX[filename] = media.load(data.filepath(filename), None, False)
-        return self.dictSFX[filename]
+        try:
+            if not self.dictSFX.has_key(filename):
+                self.dictSFX[filename] = media.load(data.filepath(filename), None, False)
+            return self.dictSFX[filename]
+        except media.MediaFormatException:
+            print "Media Format Exception:"
+            print media.MediaFormatException
     
     def playSFX(self, filename):
         try:
@@ -44,7 +49,8 @@ class SoundManager:
             self.smSFX.queue(self.loadSFX(self.lastSFX))
             self.smSFX.play()
         except media.MediaFormatException:
-            pass
+            print "Media Format Exception:"
+            print media.MediaFormatException
     
     def stopSFX(self):
         self.smSFX.pause()
