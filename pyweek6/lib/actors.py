@@ -8,7 +8,7 @@ import random
 FALLSPEED = 500.
 
 class Conveyor(ClickableActor): # should inherit from actors as well so we can call update
-    SPEED = 50. #pixels per second
+    SPEED = 10. #pixels per second
     def __init__(self, parent):
         ClickableActor.__init__(self, parent, 'dummy.png', x=0, y=200, width=730, height=80)
 
@@ -92,6 +92,11 @@ class Robot(ClickableActor):
         self.update_stacking()
         self.parts.append(part)
         return True
+        
+    def do_click_action(self,x,y):
+        print "clicked!"
+        self.dispatch_event('widget_clicked',self)
+        
     def update_stacking(self):
         legheight = bodyheight = headheight = 0
         if self.legs:
@@ -103,6 +108,8 @@ class Robot(ClickableActor):
             headheight = self.head.image.height
             self.head.y = self.y + legheight + bodyheight
         self.height = legheight+bodyheight+headheight
+        
+Robot.register_event_type('widget_clicked')
     
 class PartsBin(ClickableActor):
     def __init__(self,parent,imageName,x,y,width,height):

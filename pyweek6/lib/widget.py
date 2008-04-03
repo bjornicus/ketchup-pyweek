@@ -4,6 +4,7 @@ from pyglet.gl import *
 class Widget(object):
     def __init__(self,parent,x,y,width,height):
         parent.children.append(self)
+        self.parent = parent
         self.x = x
         self.y = y
         self.width = width
@@ -42,7 +43,4 @@ class ClickableActor(Actor, Widget):
         Actor.draw(self)
         glColor4f(1, 1, 1, 1) 
         
-    def do_click_action(self,x,y):
-        self.dispatch_event('widget_clicked',self)
-
 ClickableActor.register_event_type('widget_clicked')

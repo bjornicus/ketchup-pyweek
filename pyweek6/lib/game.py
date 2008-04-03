@@ -24,7 +24,8 @@ class Game(event.EventDispatcher):
         self.widgets = self.children = []
         self.background = image.load(data.filepath("Env09.png"))
         self.claw = Claw('claw.png')
-        self.add_actor(self.claw)
+        self.claw.push_handlers(self)
+        #self.add_actor(self.claw)
         conveyor = Conveyor(self)
         self.add_actor(conveyor)
         conveyor.create_recycle_bin()
@@ -39,6 +40,7 @@ class Game(event.EventDispatcher):
         self.background.blit(0,0)
         for actor in self.actors:
             actor.update(dt)
+        self.claw.update(dt)
 
     def add_actor(self, actor):
         actor.push_handlers(self)
