@@ -32,6 +32,8 @@ class Game(event.EventDispatcher):
         self.add_actor(RandomPartGenerator())
         self.add_actor(FinishedBin(self))
         self.add_actor(Clock())
+        testRobot = Robot(self, 400,400)
+        self.add_actor(testRobot)
 
     def update(self,dt):
         self.background.blit(0,0)
