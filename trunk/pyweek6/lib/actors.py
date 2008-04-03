@@ -117,27 +117,38 @@ Robot.register_event_type('widget_clicked')
 class PartsBin(ClickableActor):
     def __init__(self,parent,type,x,y,width,height):
         ClickableActor.__init__(self, parent, 'dummy.png', x, y, width, height)
+        self.type = type
         self.children.append(PartsButton(self,1,x,y+height-PartsButton.HEIGHT))
         self.children.append(PartsButton(self,2,x+PartsButton.WIDTH,y+height-PartsButton.HEIGHT))
         self.children.append(PartsButton(self,3,x+PartsButton.WIDTH*2,y+height-PartsButton.HEIGHT))
-        for button in self.children:
-            self.dispatch_event('add_actor',button)
+        self.buttons = self.children[:] # make a copy of this list for update function
+        for button in self.buttons:
+            button.push_handlers(self)
         self.currentRobot = None
 
     def widget_clicked(self,button):
-        newrobot = Robot(self, self.x,self,y)
+        newrobot = Robot(self, self.x,self.y)
         newrobot.attach_part(RobotPart(self.type,button.flavor))
         if self.currentRobot:
             self.children.remove(self.currentRobot)
+            self.dispatch_event('remove_actor',self.currentRobot)
         self.currentRobot = newrobot
-
+        self.dispatch_event('add_actor',newrobot)
+        return True
+        
+    def update(self,dt):
+        ClickableActor.update(self,dt)
+        for button in self.buttons:
+            button.update(dt)
+    def do_click_action(self,x,y):
+        return False
+    
 class PartsButton(ClickableActor):
-    HEIGHT = 20
-    WIDTH = 30
+    HEIGHT = 40
+    WIDTH = 60
     def __init__(self,parent,flavor,x,y):
         ClickableActor.__init__(self, parent, 'dummy.png', x, y, PartsButton.WIDTH, PartsButton.HEIGHT)
         self.flavor = flavor
-        print 'creating parts widget at %i,%i'%(x,y)
 class FinishedBin(ClickableActor):
     def __init__(self,parent): 
         ClickableActor.__init__(self, parent,x=630, y=340, width=150, height=110)
