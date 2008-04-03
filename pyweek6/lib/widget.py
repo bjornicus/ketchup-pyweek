@@ -43,4 +43,5 @@ class ClickableActor(Actor, Widget):
         Actor.draw(self)
         glColor4f(1, 1, 1, 1) 
         
+
 ClickableActor.register_event_type('widget_clicked')

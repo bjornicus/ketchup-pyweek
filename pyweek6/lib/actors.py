@@ -8,7 +8,7 @@ import random
 FALLSPEED = 500.
 
 class Conveyor(ClickableActor): # should inherit from actors as well so we can call update
-    SPEED = 10. #pixels per second
+    SPEED = 50. #pixels per second
     def __init__(self, parent):
         ClickableActor.__init__(self, parent, 'dummy.png', x=0, y=200, width=730, height=80)
 
@@ -71,7 +71,14 @@ class Robot(ClickableActor):
         glColor4f(1, 1, 1, 1) 
         for part in self.parts:
             part.draw()
-        
+            
+    def connect(self,other): #fit two robots together
+        if self.head and other.head or self.body and other.body or self.legs and other.legs:
+            return False
+        for part in other.parts:
+            self.attach_part(part)
+        return True
+
     def attach_part(self,part):
         if (part.type == 'head'):
             if self.head is not None:
@@ -92,11 +99,7 @@ class Robot(ClickableActor):
         self.update_stacking()
         self.parts.append(part)
         return True
-        
-    def do_click_action(self,x,y):
-        print "clicked!"
-        self.dispatch_event('widget_clicked',self)
-        
+
     def update_stacking(self):
         legheight = bodyheight = headheight = 0
         if self.legs:
@@ -112,9 +115,29 @@ class Robot(ClickableActor):
 Robot.register_event_type('widget_clicked')
     
 class PartsBin(ClickableActor):
-    def __init__(self,parent,imageName,x,y,width,height):
-        ClickableActor.__init__(self, parent, imageName, x, y, width, height)
-    
+    def __init__(self,parent,type,x,y,width,height):
+        ClickableActor.__init__(self, parent, 'dummy.png', x, y, width, height)
+        self.children.append(PartsButton(self,1,x,y+height-PartsButton.HEIGHT))
+        self.children.append(PartsButton(self,2,x+PartsButton.WIDTH,y+height-PartsButton.HEIGHT))
+        self.children.append(PartsButton(self,3,x+PartsButton.WIDTH*2,y+height-PartsButton.HEIGHT))
+        for button in self.children:
+            self.dispatch_event('add_actor',button)
+        self.currentRobot = None
+
+    def widget_clicked(self,button):
+        newrobot = Robot(self, self.x,self,y)
+        newrobot.attach_part(RobotPart(self.type,button.flavor))
+        if self.currentRobot:
+            self.children.remove(self.currentRobot)
+        self.currentRobot = newrobot
+
+class PartsButton(ClickableActor):
+    HEIGHT = 20
+    WIDTH = 30
+    def __init__(self,parent,flavor,x,y):
+        ClickableActor.__init__(self, parent, 'dummy.png', x, y, PartsButton.WIDTH, PartsButton.HEIGHT)
+        self.flavor = flavor
+        print 'creating parts widget at %i,%i'%(x,y)
 class FinishedBin(ClickableActor):
     def __init__(self,parent): 
         ClickableActor.__init__(self, parent,x=630, y=340, width=150, height=110)
@@ -141,6 +164,7 @@ class RandomPartGenerator(Actor):
             self.currentRobot.move(0,-FALLSPEED*dt)
             if self.currentRobot.y < self.targetConveyor.y + 10:
                 self.currentRobot = None
+    
 RandomPartGenerator.register_event_type('add_actor')
 
 class Clock(Actor):
