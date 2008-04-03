@@ -20,7 +20,7 @@ class Claw(Actor):
         self.xdir = 1
         
     def widget_clicked(self, clickable):
-        print "event caught!"
+        print "event caught by claw!"
         if self.tracking == False:
             self.tracking = True
             self.target = clickable
