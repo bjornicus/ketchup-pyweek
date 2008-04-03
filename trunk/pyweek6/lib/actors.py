@@ -4,10 +4,16 @@ from widget import ClickableActor
 from actor import Actor
 from pyglet.gl import *
     
+FALLSPEED = 500.
+
 class Conveyor(ClickableActor): # should inherit from actors as well so we can call update
-    SPEED = 10. #pixels per second
+    SPEED = 50. #pixels per second
     def __init__(self, parent):
-        ClickableActor.__init__(self, parent, 'dummy.png', x=0, y=200, width=630, height=80)
+        ClickableActor.__init__(self, parent, 'dummy.png', x=0, y=200, width=730, height=80)
+
+    def create_recycle_bin(self):
+        self.recycleBin = RecycleBin()
+        self.dispatch_event('add_actor',self.recycleBin)
 
     def do_click_action(self,x,y):
         print "clicked the conveyor at (%i,%i) " %(x,y)
@@ -17,7 +23,25 @@ class Conveyor(ClickableActor): # should inherit from actors as well so we can c
         ClickableActor.update(self,dt)
         for robot in self.children:
             robot.move(Conveyor.SPEED*dt,0)
+            if robot.x > self.width:
+                self.recycleBin.attach(robot)
+                self.children.remove(robot)
 
+class RecycleBin(Actor):
+    def __init__(self):
+        Actor.__init__(self,x=730,y=20)
+        self.robots = []
+    def attach(self, robot):
+        self.robots.append(robot)
+    def update(self,dt):
+        Actor.update(self,dt)
+        for robot in self.robots:
+            robot.move(0,-FALLSPEED*dt)
+            if robot.y < self.y:
+                self.robots.remove(robot)
+                self.dispatch_event('remove_actor',robot)
+    
+    
 class RobotPart(Actor):
     partlist = {'head':{1:'RedHead1.png', 2:'BlueHead2.png',3:'GreenHead3.png'}, 
                 'body':{1:'RedBody1.png', 2:'BlueBody2.png',3:'GreenBody3.png'},
@@ -97,7 +121,7 @@ class RandomPartGenerator(Actor):
     def update(self,dt):
         Actor.update(self,dt)
         if self.currentRobot:
-            self.currentRobot.move(0,-500.*dt)
+            self.currentRobot.move(0,-FALLSPEED*dt)
             if self.currentRobot.y < self.targetConveyor.y + 10:
                 self.currentRobot = None
 RandomPartGenerator.register_event_type('add_actor')
