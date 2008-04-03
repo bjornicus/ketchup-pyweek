@@ -27,6 +27,7 @@ class Game(event.EventDispatcher):
         self.add_actor(self.claw)
         conveyor = Conveyor(self)
         self.add_actor(conveyor)
+        conveyor.create_recycle_bin()
         self.add_actor(PartsBin(self,'dummy.png',32,22,188,60)) #for heads
         self.add_actor(PartsBin(self,'dummy.png',240,22,188,60)) #for torsos 
         self.add_actor(PartsBin(self,'dummy.png',444,22,188,60)) #for legs
@@ -46,7 +47,7 @@ class Game(event.EventDispatcher):
             actor.push_handlers(self.claw)
     
     def remove_actor(self, actor):
-        actors.remove(actor)
+        self.actors.remove(actor)
 
     def on_key_press(self, symbol, modifiers):
         if symbol == key.ESCAPE:
