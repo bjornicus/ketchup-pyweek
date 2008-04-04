@@ -10,14 +10,14 @@ class HUD(Actor):
         self.actors = []
         
     def initComponents(self):
-        self.add_actor(RobotsRequired(self))
+        self.add_actor(RobotsOrdered(self))
         self.add_actor(Money(self))
         self.add_actor(Clock(self))
     
     def update(self, dt):
+        self.draw()
         for actor in self.actors:
             actor.update(dt)
-        self.draw()
     
     def add_actor(self, actor):
         actor.push_handlers(self)
@@ -29,13 +29,28 @@ class HUD(Actor):
         
 HUD.register_event_type('add_actor_for_listening')
 
-class RobotsRequired(Actor):
+class RobotsOrdered(Actor):
     def __init__(self, parent):
-        Actor.__init__(self, x=600, y=parent.y + 50)
-        
+        Actor.__init__(self, x=25, y=parent.y + 25)
+        self.font = pygletfont.load('Arial',30)
+        self.remaining = 0
+        self.ordered = 0
+    
+    def update(self, dt):
+        text = pygletfont.Text(self.font, "Robots: %i" %(self.remaining), self.x, self.y)
+        text.color = (0,1.0,0,1.0)
+        text.draw()
+    
+    def set(self, amount):
+        self.ordered = amount
+        self.remaining = self.ordered
+    
+    def adjust(self, amount = 1):
+        self.remaining -= amount
+
 class Clock(Actor):
     def __init__(self, parent):
-        Actor.__init__(self, x=700, y=parent.y + 50)
+        Actor.__init__(self, x=650, y=parent.y + 50)
         self.font = pygletfont.load('Arial',30)
         self.timer = Timer()
         self.timer.on_expire = self.on_expire
@@ -58,4 +73,20 @@ Clock.register_event_type('on_level_over')
 
 class Money(Actor):
     def __init__(self, parent):
-        Actor.__init__(self, x=600, y=parent.y)
+        Actor.__init__(self, x=650, y=parent.y + 5)
+        self.font = pygletfont.load('Arial',30)
+        self.set()
+    
+    def update(self, dt):
+        text = pygletfont.Text(self.font, "$%i" %(self.balance), self.x, self.y)
+        text.color = (0,1.0,0,1.0)
+        text.draw()
+    
+    def set(self, amount = 0):
+        self.balance = amount
+    
+    def withdraw(self, amount = 1):
+        self.balance -= amount
+    
+    def deposit(self, amount = 1):
+        self.balance += amount
