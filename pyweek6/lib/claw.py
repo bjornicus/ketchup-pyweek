@@ -12,7 +12,7 @@ class Claw(Actor):
         self.holding = False
         self.target = None
         self.heldTarget = None
-        self.speed = 200.0
+        self.speed = 100.0
         self.dir = 0
         self.xspeed = 0
         self.yspeed = 0
@@ -69,6 +69,8 @@ class Claw(Actor):
     def track(self,dt):
         speed = self.speed * dt
         targetHighY = self.target.y + self.target.height
+        if self.heldTarget != None:
+            targetHighY += 25
         selfHighY = self.y + self.image[0].height
         
         distance = self.target.x - self.x
