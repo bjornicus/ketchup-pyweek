@@ -144,7 +144,7 @@ class PartsButton(ClickableActor):
     HEIGHT = 40
     WIDTH = 60
     def __init__(self,parent,flavor,x,y):
-        ClickableActor.__init__(self, parent, 'dummy.png', x, y, PartsButton.WIDTH, PartsButton.HEIGHT)
+        ClickableActor.__init__(self, parent, 'dummy.png', x, y, 0, PartsButton.WIDTH, PartsButton.HEIGHT)
         self.flavor = flavor
 class FinishedBin(ClickableActor):
     class Order(object):
