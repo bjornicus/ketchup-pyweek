@@ -21,6 +21,8 @@ class Claw(Actor):
         
     def widget_clicked(self, clickable):
         print "event caught by claw!"
+        if not self.heldTarget and not isinstance(clickable, Robot):
+            return False
         if self.tracking == False:
             self.tracking = True
             self.target = clickable
@@ -41,7 +43,6 @@ class Claw(Actor):
             
         if self.heldTarget != None:
             self.heldTarget.move(self.xspeed, self.yspeed)
-            #self.heldTarget.update(dt)
             
         self.draw()
         
