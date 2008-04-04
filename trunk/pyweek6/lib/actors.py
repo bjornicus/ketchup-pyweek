@@ -129,7 +129,10 @@ class PartsBin(ClickableActor):
         self.currentRobot = newrobot
         self.dispatch_event('add_actor',newrobot)
         return True
-        
+    def detatch(self,other):
+        if self.currentRobot == other:
+            self.currentRobot = None
+        ClickableActor.detatch(self,other)
     def update(self,dt):
         ClickableActor.update(self,dt)
         for button in self.buttons:
@@ -149,17 +152,24 @@ class FinishedBin(ClickableActor):
             self.headflavor = headflavor
             self.bodyflavor = bodyflavor
             self.legflavor = legflavor
-    def __init__(self,parent): 
+    def __init__(self,parent, numOrders = 1): 
         ClickableActor.__init__(self, parent,x=630, y=340, width=150, height=110)
         self.orderlist = []
+        for x in range(numOrders):
+            self.generate_new_order()
     def attach(self,robot):
         for order in self.orderlist:
             if robot.head.flavor == order.headflavor and robot.body.flavor == order.bodyflavor and robot.legs.flavor == order.legflavor:
                 self.dispatch_event('on_robot_shiped',robot)
+                self.orderlist.remove(order)
+                self.generate_new_order()
                 return True
         self.dispatch_event('on_robot_rejected',robot)
     def generate_new_order(self):
-        pass
+        newOrder = FinishedBin.Order(random.randint(1,3),random.randint(1,3),random.randint(1,3))
+        print "head: %d\nBody: %d\nLegs: %d\n"%(newOrder.headflavor,newOrder.bodyflavor,newOrder.legflavor) 
+        self.orderlist.append(newOrder)
+        
 FinishedBin.register_event_type('on_robot_shiped')
 FinishedBin.register_event_type('on_robot_rejected')
 

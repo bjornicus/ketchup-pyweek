@@ -61,4 +61,8 @@ class ClickableActor(Actor, Widget):
         self.children.append(other)
         other.parent = self
         
+    def detatch(self,other):
+        if other in self.children:
+            self.children.remove(other)
+        
 ClickableActor.register_event_type('widget_clicked')
