@@ -7,6 +7,7 @@ from pyglet.gl import *
 import random
     
 FALLSPEED = 500.
+ORDER_IMAGE_WIDTH = 48
 
 class Conveyor(ClickableActor): # should inherit from actors as well so we can call update
     SPEED = 30. #pixels per second
@@ -154,9 +155,17 @@ class FinishedBin(ClickableActor):
             self.bodyflavor = bodyflavor
             self.legflavor = legflavor
             self.image = image.create(32,96)
+            # there are better ways, but this hack should do the job:
+            self.head = Actor(RobotPart.partlist['head'][headflavor])
+            self.body = Actor(RobotPart.partlist['body'][bodyflavor])
+            self.legs = Actor(RobotPart.partlist['legs'][legflavor])
+        def draw(self,x,y):
+            self.legs.image[0].blit(x,y,width=ORDER_IMAGE_WIDTH,height=32)
+            self.body.image[0].blit(x,y+32,width=ORDER_IMAGE_WIDTH,height=32)
+            self.head.image[0].blit(x,y+64,width=ORDER_IMAGE_WIDTH,height=32)
             
-    def __init__(self,parent, numOrders = 1): 
-        ClickableActor.__init__(self, parent,x=630, y=340, width=150, height=110)
+    def __init__(self,parent, numOrders = 4): 
+        ClickableActor.__init__(self, parent,x=630, y=340, z=0.5, width=150, height=110)
         self.orderlist = []
         for x in range(numOrders):
             self.generate_new_order()
@@ -180,6 +189,8 @@ class FinishedBin(ClickableActor):
         self.orderlist.append(newOrder)
     def update(self,dt):
         Actor.update(self,dt)
+        for i in range(len(self.orderlist)):
+            self.orderlist[i].draw(i*ORDER_IMAGE_WIDTH,500)
         for robot in self.shippingRobots:
             robot.move(100*dt,0)
             if robot.x > self.x+self.width:
