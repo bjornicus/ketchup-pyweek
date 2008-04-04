@@ -130,6 +130,7 @@ class PartsBin(ClickableActor):
             self.dispatch_event('remove_actor',self.currentRobot)
         self.currentRobot = newrobot
         self.dispatch_event('add_actor',newrobot)
+        self.dispatch_event('on_parts_ordered')
         return True
     def detatch(self,other):
         if self.currentRobot == other:
@@ -141,7 +142,8 @@ class PartsBin(ClickableActor):
             button.update(dt)
     def do_click_action(self,x,y):
         return False
-    
+PartsBin.register_event_type('on_parts_ordered')
+
 class PartsButton(ClickableActor):
     HEIGHT = 40
     WIDTH = 60
@@ -149,6 +151,8 @@ class PartsButton(ClickableActor):
         imageName = RobotPart.partlist[type][flavor] #change this later
         ClickableActor.__init__(self, parent, imageName, x, y, 0, PartsButton.WIDTH, PartsButton.HEIGHT)
         self.flavor = flavor
+        
+
 class FinishedBin(ClickableActor):
     class Order(object):
         def __init__(self,headflavor,bodyflavor,legflavor):
