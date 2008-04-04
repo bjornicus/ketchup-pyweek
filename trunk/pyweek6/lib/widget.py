@@ -33,17 +33,26 @@ class Widget(object):
         return False
 
 class ClickableActor(Actor, Widget):
-    def __init__(self,parent, imageName="dummy.png", x=0, y=0, width=1, height=1, xframes = 1, yframes = 1):
+    def __init__(self,parent, imageName="dummy.png", x=0, y=0, z=0, width=1, height=1, xframes = 1, yframes = 1):
         Widget.__init__(self,parent,x,y,width,height)
-        Actor.__init__(self,imageName,x,y,xframes,yframes)
+        Actor.__init__(self,imageName,x,y,z,xframes,yframes)
     
     def draw(self):
-        glColor4f(1, 0, 0, .3) # red
-        glRectf(self.x, self.y, self.x+self.width, self.y+self.height) 
+        self.draw_bounding_box()
         glColor4f(1, 1, 1, .5) 
         Actor.draw(self)
         glColor4f(1, 1, 1, 1) 
-    
+    def draw_bounding_box(self):
+        glColor4f(1, 0, 0, .3) # red
+        glBegin(GL_LINE_STRIP);
+        glVertex2f(self.x,self.y);
+        glVertex2f(self.x+self.width,self.y);
+        glVertex2f(self.x+self.width,self.y+self.height);
+        glVertex2f(self.x, self.y+self.height);
+        glVertex2f(self.x,self.y);
+        glEnd();
+        glColor4f(1, 1, 1, 1) 
+        
     def do_click_action(self,x,y):
         self.dispatch_event('widget_clicked',self)
         return True
