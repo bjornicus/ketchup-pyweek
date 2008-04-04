@@ -25,20 +25,35 @@ class MenuItem(Widget):
 
 class Menu(event.EventDispatcher):
     def __init__(self, width, height):
+        self.width = width
+        self.height = height
         self.font = pygletfont.load('Arial', 36)
         self.children = []
         self.menuItems = self.children
         MenuItem(self, pygletfont.Text(self.font,"Start Game"),'on_new_game')
-        MenuItem(self, pygletfont.Text(self.font,"Resume Game"),'on_resume_game')
         MenuItem(self, pygletfont.Text(self.font,"Credits"),'on_credits')
         MenuItem(self, pygletfont.Text(self.font,"Exit"),'on_exit_program')
-        #maybe the following should be a separate method:
-        menuHeight = self.menuItems[0].height*(len(self.menuItems))
-        topY = height - (height-menuHeight)/2
+        #only want 'resume game' showing when there is a game to resume
+        self.resume_game_item = MenuItem(self, pygletfont.Text(self.font,"Resume Game"),'on_resume_game')
+        self.disable_resume() 
+        self.align_menu_items()
+        
+    def align_menu_items(self):
+        menuheight = self.menuItems[0].height*(len(self.menuItems))
+        topY = self.height - (self.height-menuheight)/2
         for item in self.menuItems:
             item.setY(topY)
             topY -= item.height
-            item.setX((width-item.width)/2)
+            item.setX((self.width-item.width)/2)
+    
+    def enable_resume(self):
+        if not self.resume_game_item in self.menuItems:
+            self.menuItems.insert(1,self.resume_game_item)
+            self.align_menu_items()
+        
+    def disable_resume(self):
+        self.menuItems.remove(self.resume_game_item) 
+        self.align_menu_items()
     
     def update(self,dt):
         for item in self.menuItems:

@@ -66,3 +66,4 @@ class Game(event.EventDispatcher):
 
 Game.register_event_type('on_pause')
 Game.register_event_type('on_quit')
+

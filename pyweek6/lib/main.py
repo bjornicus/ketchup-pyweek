@@ -28,7 +28,6 @@ soundManager = SoundManager()
 
 def main():
     stateManager = StateManager()
-    soundManager.playMusic(soundManager.defaultMusic)
     while not win.has_exit:
         win.dispatch_events()
         win.clear()
@@ -46,15 +45,14 @@ class StateManager(object):
         self.menu = Menu(800,600)
         self.menu.push_handlers(self)
         
-        self.game = Game()
-        self.game.push_handlers(self)
+        self.game = None
         
         self.credits = Credits()
         self.credits.push_handlers(self)
         
         #change this back to intro before we ship!
-        self.currentState = self.game
-        win.push_handlers(self.game)
+        self.currentState = self.menu
+        win.push_handlers(self.menu)
     
     def update(self, dt):
         self.currentState.update(dt)
@@ -71,6 +69,7 @@ class StateManager(object):
         win.pop_handlers()
         self.currentState = self.game
         win.push_handlers(self.game)
+        self.play_music()
     
     def on_new_game(self):
         win.pop_handlers()
@@ -78,19 +77,27 @@ class StateManager(object):
         self.game.push_handlers(self)
         self.currentState = self.game
         win.push_handlers(self.game)
+        self.menu.enable_resume()
+        self.play_music()
+        
+    def on_game_over(self):
+        self.menu.disable_resume()
+        show_menu()
+        
 
     def on_quit(self):
         self.show_menu()
+        self.stop_music()
         
     def on_credits(self):
         win.pop_handlers()
         self.currentState = self.credits
         win.push_handlers(self.credits)
         
-    def on_play_music(self, filename = soundManager.defaultMusic):
+    def play_music(self, filename = soundManager.defaultMusic):
         soundManager.playMusic(filename)
         
-    def on_stop_music(self):
+    def stop_music(self):
         soundManager.stopMusic()
         
     def on_play_sfx(self, filename):
