@@ -3,10 +3,13 @@ from pyglet import event
 import data
 
 class Actor(event.EventDispatcher):
+    ImageDictionary = {}
     def __init__(self, imageName = 'dummy.png', x = 0, y = 0, z = 0.2, xframes = 1, yframes = 1):
-        myimage = image.load(data.filepath(imageName))
-        imageGrid = image.ImageGrid(myimage, yframes, xframes)
-        self.image = image.TextureGrid(imageGrid)
+        if not Actor.ImageDictionary.has_key(imageName):
+            myimage = image.load(data.filepath(imageName))
+            imageGrid = image.ImageGrid(myimage, yframes, xframes)
+            Actor.ImageDictionary[imageName] = image.TextureGrid(imageGrid)
+        self.image = Actor.ImageDictionary[imageName]
         self.x = x
         self.y = y
         self.z = z
