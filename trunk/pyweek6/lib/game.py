@@ -31,6 +31,7 @@ class Game(event.EventDispatcher):
         self.recyclebin = RecycleBin()
         conveyor = Conveyor(self)
         self.hud = HUD()
+        self.finishbin = FinishedBin(self)
         self.add_actor(conveyor)
         self.add_actor(self.claw)
         self.add_actor(self.recyclebin)
@@ -38,13 +39,14 @@ class Game(event.EventDispatcher):
         self.add_actor(PartsBin(self,'head',32,22,188,100)) 
         self.add_actor(PartsBin(self,'body',240,22,188,100))
         self.add_actor(PartsBin(self,'legs',444,22,188,100))
-        self.add_actor(FinishedBin(self))
+        self.add_actor(self.finishbin)
         self.add_actor(self.hud)
         
         self.level = 1
         self.timer = Timer()
         self.timer.set(0,5,True)
         self.font = pygletfont.load('Arial',50)
+        self.fontsmall = pygletfont.load('Arial',30)
         self.beginTime = None
         self.levelText = pygletfont.Text(self.font, "Level %i" %self.level, x = 800 / 2, y = 400, halign = pygletfont.Text.CENTER)
         self.state = 'levelBegin'
@@ -63,7 +65,7 @@ class Game(event.EventDispatcher):
     def levelBeginState(self,dt):
         self.timer.update(dt)
         self.updateActors(0)
-        self.beginTime = pygletfont.Text(self.font, "Begins in " + str(self.timer.getSeconds()) + " Seconds", x = 800 / 2, y = 400 - self.font.ascent, halign = pygletfont.Text.CENTER)
+        self.beginTime = pygletfont.Text(self.fontsmall, "Begins in " + str(self.timer.getSeconds()) + " Seconds", x = 800 / 2, y = 400 - self.font.ascent, halign = pygletfont.Text.CENTER)
         self.levelText.draw()
         self.beginTime.draw()
         if self.level <= 1:
@@ -80,6 +82,7 @@ class Game(event.EventDispatcher):
         self.timer.update(dt)
         self.updateActors(0)
         self.levelText.draw()
+        self.levelInfoText.draw()
         if self.timer.active == False:
             if self.state == "gameOver":
                 self.dispatch_event('on_game_over')
@@ -120,6 +123,10 @@ class Game(event.EventDispatcher):
     def on_robot_shipped(self,robot):
         self.hud.money.deposit(5)
         self.hud.robotsordered.decrease()
+        if self.hud.robotsordered.remaining == 0:
+            self.hud.clock.timer.active = False
+            self.hud.money.deposit(self.hud.clock.timer.getMinutes()*10)
+            self.on_level_over()
 
     def on_parts_ordered(self):
         self.hud.money.withdraw(1)
@@ -145,12 +152,14 @@ class Game(event.EventDispatcher):
     def on_level_completed(self):
         self.state = 'levelOver'
         self.levelText = pygletfont.Text(self.font, "Level %i Completed!" %self.level, x = 800 / 2, y = 400, halign = pygletfont.Text.CENTER)
+        self.levelInfoText = pygletfont.Text(self.fontsmall, "Bonus: %i Mins * $10 = $%i" %(self.hud.clock.timer.getMinutes(), self.hud.clock.timer.getMinutes()*10), x = 800 / 2, y = 400 - self.font.ascent, halign = pygletfont.Text.CENTER)
         self.timer.set(0,5,True)
     
     def on_level_lost(self):
         self.state = 'gameOver'
         self.levelText = pygletfont.Text(self.font, "GAME OVER!", x = 800 / 2, y = 400, halign = pygletfont.Text.CENTER)
-        self.timer.set(0,5,True)
+        self.levelInfoText = pygletfont.Text(self.fontsmall, "Out of Time!" , x = 800 / 2, y = 400 - self.font.ascent, halign = pygletfont.Text.CENTER)
+        self.timer.set(0,10,True)
 
 Game.register_event_type('on_pause')
 Game.register_event_type('on_quit')

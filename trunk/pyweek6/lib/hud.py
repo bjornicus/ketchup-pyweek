@@ -102,7 +102,7 @@ class Money(Actor):
         self.balance = amount
     
     def withdraw(self, amount = 1):
-        self.balance -= amount
+        self.balance -= int(amount)
     
     def deposit(self, amount = 1):
-        self.balance += amount
+        self.balance += int(amount)
