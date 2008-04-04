@@ -12,10 +12,6 @@ class Conveyor(ClickableActor): # should inherit from actors as well so we can c
     def __init__(self, parent):
         ClickableActor.__init__(self, parent, 'dummy.png', x=0, y=200, width=730, height=80)
 
-    def create_recycle_bin(self):
-        self.recycleBin = RecycleBin()
-        self.dispatch_event('add_actor',self.recycleBin)
-
     def do_click_action(self,x,y):
         print "clicked the conveyor at (%i,%i) " %(x,y)
         ClickableActor.do_click_action(self,x,y)
@@ -25,7 +21,7 @@ class Conveyor(ClickableActor): # should inherit from actors as well so we can c
         for robot in self.children:
             robot.move(Conveyor.SPEED*dt,0)
             if robot.x > self.width:
-                self.recycleBin.attach(robot)
+                self.dispatch_event('on_recycle_robot',robot)
                 self.children.remove(robot)
 
 class RecycleBin(Actor):
@@ -150,8 +146,24 @@ class PartsButton(ClickableActor):
         ClickableActor.__init__(self, parent, 'dummy.png', x, y, PartsButton.WIDTH, PartsButton.HEIGHT)
         self.flavor = flavor
 class FinishedBin(ClickableActor):
+    class Order(object):
+        def __init__(self,headflavor,bodyflavor,legflavor):
+            self.headflavor = headflavor
+            self.bodyflavor = bodyflavor
+            self.legflavor = legflavor
     def __init__(self,parent): 
         ClickableActor.__init__(self, parent,x=630, y=340, width=150, height=110)
+        self.orderlist = []
+    def attach(self,robot):
+        for order in self.orderlist:
+            if robot.head.flavor == order.headflavor and robot.body.flavor == order.bodyflavor and robot.legs.flavor == order.legflavor:
+                self.dispatch_event('on_robot_shiped',robot)
+                return True
+        self.dispatch_event('on_robot_rejected',robot)
+    def generate_new_order(self):
+        pass
+FinishedBin.register_event_type('on_robot_shiped')
+FinishedBin.register_event_type('on_robot_rejected')
 
 class RandomPartGenerator(Actor):
     def __init__(self, conveyor):
