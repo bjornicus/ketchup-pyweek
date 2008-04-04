@@ -17,7 +17,7 @@ class Actor(event.EventDispatcher):
         self.frameRange = xframes * yframes
         
     def draw(self):
-        self.image[self.currentFrame].blit(self.x,self.y,self.z)
+        self.image[self.currentFrame].blit(self.x,self.y)
         
     def move(self, dx, dy):
         self.x += dx
