@@ -65,8 +65,11 @@ class Clock(Actor):
         
     def update(self,dt):
         self.timer.update(dt)
-        text = pygletfont.Text(self.font, "%i:%02i" %(self.timer.getMinutes() ,self.timer.getSeconds()), self.x, self.y)
-        text.color = (0,1.0,0,1.0)
+        text = pygletfont.Text(self.font, "T %i:%02i" %(self.timer.getMinutes() ,self.timer.getSeconds()), self.x, self.y)
+        if self.timer.remainingTime > 30:
+            text.color = (0,1.0,0,1.0)
+        else:
+            text.color = (1.0,0,0,1.0)
         text.draw()
         
     def on_level_begin(self,level):
@@ -81,8 +84,11 @@ class Money(Actor):
         self.set()
     
     def update(self, dt):
-        text = pygletfont.Text(self.font, "$%i" %(self.balance), self.x, self.y)
-        text.color = (0,1.0,0,1.0)
+        text = pygletfont.Text(self.font, "$ %i" %(self.balance), self.x, self.y)
+        if self.balance >= 0:
+            text.color = (0,1.0,0,1.0)
+        else:
+            text.color = (1.0,0,0,1.0)
         text.draw()
     
     def set(self, amount = 0):

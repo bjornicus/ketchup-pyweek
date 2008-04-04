@@ -103,11 +103,13 @@ class Game(event.EventDispatcher):
         self.recyclebin.attach(robot)
 
     def on_robot_rejected(self,robot):
-        print "robot rejected"
         self.recyclebin.attach(robot)
         
     def on_robot_shipped(self,robot):
         self.hud.money.deposit(5)
+
+    def on_parts_ordered(self):
+        self.hud.money.withdraw(1)
 
     def on_key_press(self, symbol, modifiers):
         if symbol == key.ESCAPE:
