@@ -9,7 +9,7 @@ class Timer(event.EventDispatcher):
             self.remainingTime -= dt
             if self.remainingTime <= 0:
                 self.active = False
-                self.expire()
+                self.on_expire()
     
     def set(self, min=1, sec=0, active = False):
         self.duration = ((min*60) + sec)
@@ -22,6 +22,6 @@ class Timer(event.EventDispatcher):
     def getSeconds(self):
         return int(self.remainingTime - (self.getMinutes() * 60))
     
-    def expire(self):
-        # overload this function for timer expired event.
-        print "Timer expired."
+    def on_expire(self):
+        # overload this function for on timer expire event.
+        pass
