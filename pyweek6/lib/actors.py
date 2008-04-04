@@ -10,7 +10,7 @@ FALLSPEED = 500.
 class Conveyor(ClickableActor): # should inherit from actors as well so we can call update
     SPEED = 30. #pixels per second
     def __init__(self, parent):
-        ClickableActor.__init__(self, parent, 'dummy.png', x=0, y=200, width=730, height=80)
+        ClickableActor.__init__(self, parent, 'dummy.png', x=0, y=200, z=-0.1, width=730, height=80)
 
     def do_click_action(self,x,y):
         print "clicked the conveyor at (%i,%i) " %(x,y)
@@ -23,6 +23,7 @@ class Conveyor(ClickableActor): # should inherit from actors as well so we can c
             if robot.x > self.width:
                 self.dispatch_event('on_recycle_robot',robot)
                 self.children.remove(robot)
+Conveyor.register_event_type('on_recycle_robot')
 
 class RecycleBin(Actor):
     def __init__(self):
@@ -61,10 +62,7 @@ class Robot(ClickableActor):
         for part in self.parts:
             part.move(dx,dy)
     def draw(self): # we don't actually draw the robot, it just holds the parts
-        glColor4f(1, 0, 0, .3) # red
-        glRectf(self.x, self.y, self.x+self.width, self.y+self.height) 
-        glColor4f(1, 1, 1, .5) 
-        glColor4f(1, 1, 1, 1) 
+        self.draw_bounding_box()
         for part in self.parts:
             part.draw()
             

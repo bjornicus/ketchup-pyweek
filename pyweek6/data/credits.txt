@@ -1,11 +1,17 @@
-Curly
-
+Art:
 Bassima
-
 Bess
-
+    
+Programming:
 Bjorn
-
+Curly
+Reuben
+    
+Game Design:
+Bassima
+Bess
+Bjorn
+Curly
+Reuben
 Suzanne
 
-Reuben

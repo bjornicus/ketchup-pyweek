@@ -4,6 +4,7 @@ from pyglet import image
 from actors import *
 from claw import Claw
 from hud import HUD
+from actor import Actor
 import data
 """
 at the start of the game we need (as for as actors): 
@@ -25,13 +26,12 @@ class Game(event.EventDispatcher):
         self.widgets = self.children = []
         self.background = image.load(data.filepath("Env09.png"))
         self.claw = Claw('claw.png')
-        self.claw.push_handlers(self)
-        #self.add_actor(self.claw)
+        self.recyclebin = RecycleBin()
         conveyor = Conveyor(self)
         self.add_actor(conveyor)
-        self.add_actor(RandomPartGenerator(conveyor))
-        self.recyclebin = RecycleBin()
+        self.add_actor(self.claw)
         self.add_actor(self.recyclebin)
+        self.add_actor(RandomPartGenerator(conveyor))
         self.add_actor(PartsBin(self,'head',32,22,188,100)) 
         self.add_actor(PartsBin(self,'body',240,22,188,100))
         self.add_actor(PartsBin(self,'legs',444,22,188,100))
@@ -39,14 +39,14 @@ class Game(event.EventDispatcher):
         self.add_actor(HUD())
 
     def update(self,dt):
-        self.background.blit(0,0)
+        self.background.blit(0,0,-0.9)
         for actor in self.actors:
             actor.update(dt)
-        self.claw.update(dt)
 
-    def add_actor(self, actor):
+    def add_actor(self, actor, layer = 0):
         actor.push_handlers(self)
         self.actors.append(actor)
+        self.actors.sort(key=lambda actor:actor.z) #sort the actors by z value
         if isinstance(actor, ClickableActor):
             actor.push_handlers(self.claw)
     

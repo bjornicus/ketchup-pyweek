@@ -6,7 +6,7 @@ from actors import Robot
 
 class Claw(Actor):
     def __init__(self, imageName):
-        Actor.__init__(self,imageName, 50, 500, 2, 1)
+        Actor.__init__(self,imageName, 50, 500, 0.9, 2, 1)
         self.y = self.y - self.image[self.currentFrame].height
         self.tracking = False
         self.holding = False
