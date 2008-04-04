@@ -1,5 +1,6 @@
 from pyglet import event
 from pyglet import clock
+from pyglet import image
 from widget import ClickableActor
 from actor import Actor
 from pyglet.gl import *
@@ -152,6 +153,8 @@ class FinishedBin(ClickableActor):
             self.headflavor = headflavor
             self.bodyflavor = bodyflavor
             self.legflavor = legflavor
+            self.image = image.create(32,96)
+            
     def __init__(self,parent, numOrders = 1): 
         ClickableActor.__init__(self, parent,x=630, y=340, width=150, height=110)
         self.orderlist = []
