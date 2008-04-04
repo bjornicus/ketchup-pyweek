@@ -157,6 +157,7 @@ class FinishedBin(ClickableActor):
         self.orderlist = []
         for x in range(numOrders):
             self.generate_new_order()
+        self.shippingRobots = []
     def attach(self,robot):
         if len(robot.parts) != 3:
             self.dispatch_event('on_robot_rejected',robot)
@@ -164,6 +165,7 @@ class FinishedBin(ClickableActor):
         for order in self.orderlist:
             if robot.head.flavor == order.headflavor and robot.body.flavor == order.bodyflavor and robot.legs.flavor == order.legflavor:
                 self.dispatch_event('on_robot_shiped',robot)
+                self.shippingRobots.append(robot)
                 self.orderlist.remove(order)
                 self.generate_new_order()
                 return True
@@ -173,7 +175,14 @@ class FinishedBin(ClickableActor):
         newOrder = FinishedBin.Order(random.randint(1,3),random.randint(1,3),random.randint(1,3))
         print "head: %d\nBody: %d\nLegs: %d\n"%(newOrder.headflavor,newOrder.bodyflavor,newOrder.legflavor) 
         self.orderlist.append(newOrder)
-        
+    def update(self,dt):
+        Actor.update(self,dt)
+        for robot in self.shippingRobots:
+            robot.move(100*dt,0)
+            if robot.x > self.x+self.width:
+                self.shippingRobots.remove(robot)
+                self.dispatch_event('remove_actor',robot)
+                
 FinishedBin.register_event_type('on_robot_shiped')
 FinishedBin.register_event_type('on_robot_rejected')
 
@@ -188,7 +197,7 @@ class RandomPartGenerator(Actor):
         if self.currentRobot:
             return
         newrobot = Robot(self.targetConveyor, self.x,self.y)
-        for i in range(2):
+        for i in range(1):
             type = random.choice(('head','body','legs'))
             flavor = random.choice((1,2,3))
             newrobot.attach_part(RobotPart(type,flavor))
