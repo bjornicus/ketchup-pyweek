@@ -10,10 +10,10 @@ class HUD(Actor):
         self.actors = []
         
     def initComponents(self):
-        self.ordered = RobotsOrdered(self)
+        self.robotsordered = RobotsOrdered(self)
         self.money = Money(self)
         self.clock = Clock(self)
-        self.add_actor(self.ordered)
+        self.add_actor(self.robotsordered)
         self.add_actor(self.money)
         self.add_actor(self.clock)
     
@@ -46,11 +46,15 @@ class RobotsOrdered(Actor):
         text.draw()
     
     def set(self, amount):
-        self.ordered = amount
+        self.ordered = int(amount)
         self.remaining = self.ordered
     
-    def adjust(self, amount = 1):
-        self.remaining -= amount
+    def decrease(self, amount = 1):
+        if self.remaining >= 1:
+            self.remaining -= amount
+        
+        if self.remaining < 0:
+            self.remaining = 0
 
 class Clock(Actor):
     def __init__(self, parent):

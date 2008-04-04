@@ -57,6 +57,8 @@ class Game(event.EventDispatcher):
             self.updateActors(dt)
         elif self.state == 'levelOver':
             self.levelOverState(dt)
+        elif self.state == 'gameOver':
+            self.levelOverState(dt)
         
     def levelBeginState(self,dt):
         self.timer.update(dt)
@@ -66,8 +68,10 @@ class Game(event.EventDispatcher):
         self.beginTime.draw()
         if self.level <= 1:
             self.hud.clock.timer.set(1,0,False)
+            self.hud.robotsordered.set(1)
         else:
             self.hud.clock.timer.set(0,15+(self.level*45),False)
+            self.hud.robotsordered.set(self.level*1.75)
         if self.timer.active == False:
             self.state = 'levelRunning'
             self.dispatch_event('on_level_begin',self.level)
@@ -77,10 +81,14 @@ class Game(event.EventDispatcher):
         self.updateActors(0)
         self.levelText.draw()
         if self.timer.active == False:
-            self.level += 1
-            self.levelText = pygletfont.Text(self.font, "Level %i" %self.level, x = 800 / 2, y = 400, halign = pygletfont.Text.CENTER)
-            self.timer.set(0,5,True)
-            self.state = 'levelBegin'
+            if self.state == "gameOver":
+                self.dispatch_event('on_game_over')
+                return True
+            else:
+                self.level += 1
+                self.levelText = pygletfont.Text(self.font, "Level %i" %self.level, x = 800 / 2, y = 400, halign = pygletfont.Text.CENTER)
+                self.timer.set(0,5,True)
+                self.state = 'levelBegin'
             
     def updateActors(self,dt):
         for actor in self.actors:
@@ -111,6 +119,7 @@ class Game(event.EventDispatcher):
         
     def on_robot_shipped(self,robot):
         self.hud.money.deposit(5)
+        self.hud.robotsordered.decrease()
 
     def on_parts_ordered(self):
         self.hud.money.withdraw(1)
@@ -128,11 +137,25 @@ class Game(event.EventDispatcher):
                 return True
                 
     def on_level_over(self):
+        if self.hud.robotsordered.remaining == 0:
+            self.dispatch_event('on_level_completed')
+        else:
+            self.dispatch_event('on_level_lost')
+    
+    def on_level_completed(self):
         self.state = 'levelOver'
-        self.levelText = pygletfont.Text(self.font, "Level %i Complete!" %self.level, x = 800 / 2, y = 400, halign = pygletfont.Text.CENTER)
+        self.levelText = pygletfont.Text(self.font, "Level %i Completed!" %self.level, x = 800 / 2, y = 400, halign = pygletfont.Text.CENTER)
+        self.timer.set(0,5,True)
+    
+    def on_level_lost(self):
+        self.state = 'gameOver'
+        self.levelText = pygletfont.Text(self.font, "GAME OVER!", x = 800 / 2, y = 400, halign = pygletfont.Text.CENTER)
         self.timer.set(0,5,True)
 
 Game.register_event_type('on_pause')
 Game.register_event_type('on_quit')
 Game.register_event_type('on_level_begin')
+Game.register_event_type('on_level_completed')
+Game.register_event_type('on_level_lost')
+Game.register_event_type('on_game_over')
 

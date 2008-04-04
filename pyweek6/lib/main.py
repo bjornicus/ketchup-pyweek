@@ -82,8 +82,7 @@ class StateManager(object):
         
     def on_game_over(self):
         self.menu.disable_resume()
-        show_menu()
-        
+        self.on_quit()
 
     def on_quit(self):
         self.show_menu()
