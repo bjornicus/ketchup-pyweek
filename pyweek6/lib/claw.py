@@ -50,7 +50,7 @@ class Claw(Actor):
         if isinstance(self.target,Robot):
             if self.heldTarget == None:
                 self.changeFrame(1)
-                self.target.parent.children.remove(self.target)
+                self.target.parent.detatch(self.target)
                 self.target.parent = None
                 self.heldTarget = self.target
                 self.holding = True

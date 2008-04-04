@@ -158,6 +158,9 @@ class FinishedBin(ClickableActor):
         for x in range(numOrders):
             self.generate_new_order()
     def attach(self,robot):
+        if len(robot.parts) != 3:
+            self.dispatch_event('on_robot_rejected',robot)
+            return True
         for order in self.orderlist:
             if robot.head.flavor == order.headflavor and robot.body.flavor == order.bodyflavor and robot.legs.flavor == order.legflavor:
                 self.dispatch_event('on_robot_shiped',robot)
@@ -165,6 +168,7 @@ class FinishedBin(ClickableActor):
                 self.generate_new_order()
                 return True
         self.dispatch_event('on_robot_rejected',robot)
+        return True
     def generate_new_order(self):
         newOrder = FinishedBin.Order(random.randint(1,3),random.randint(1,3),random.randint(1,3))
         print "head: %d\nBody: %d\nLegs: %d\n"%(newOrder.headflavor,newOrder.bodyflavor,newOrder.legflavor) 
