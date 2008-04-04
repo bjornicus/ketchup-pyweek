@@ -191,7 +191,7 @@ class FinishedBin(ClickableActor):
     def update(self,dt):
         Actor.update(self,dt)
         for i in range(len(self.orderlist)):
-            self.orderlist[i].draw(i*ORDER_IMAGE_WIDTH,500)
+            self.orderlist[i].draw((i*ORDER_IMAGE_WIDTH)+304,500)
         for robot in self.shippingRobots:
             robot.move(100*dt,0)
             if robot.x > self.x+self.width:
