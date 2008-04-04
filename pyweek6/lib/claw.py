@@ -12,7 +12,7 @@ class Claw(Actor):
         self.holding = False
         self.target = None
         self.heldTarget = None
-        self.speed = 80.0
+        self.speed = 200.0
         self.dir = 0
         self.xspeed = 0
         self.yspeed = 0
@@ -58,7 +58,11 @@ class Claw(Actor):
                 self.heldTarget.dispatch_event('remove_actor',self.heldTarget)
                 self.heldTarget = None
                 self.changeFrame(0)
-            
+        elif self.heldTarget: #lets set down the robot
+            self.target.attach(self.heldTarget)
+            self.heldTarget = None
+            self.changeFrame(0)
+        
         self.target = None
         self.tracking = False
         
