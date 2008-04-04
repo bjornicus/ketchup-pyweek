@@ -1,25 +1,20 @@
 from pyglet import event
 from pyglet import image
 from actor import Actor
+from timer import Timer
 import data
 
 
 class Intro(event.EventDispatcher):
-    # Timer duration in seconds.
-    timerDuration = 5
     background = image.load(data.filepath('intro.png'))
     def __init__(self):
-        # Reset timer.
-        self.timerCurrent = 0
+        self.timer = Timer()
+        self.timer.expire = self.finish
+        self.timer.set(0,5,True)
 
     def update(self,dt):
         Intro.background.blit(0,0)
-        # Check for timer duration.
-        if self.timerCurrent > self.timerDuration:
-            self.finish()
-        else:
-            # Increment timer.
-            self.timerCurrent += dt
+        self.timer.update(dt)
 
     def on_key_press(self, symbol, modifiers):
         self.finish()
