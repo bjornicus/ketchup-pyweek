@@ -41,7 +41,7 @@ class Claw(Actor):
             
         if self.heldTarget != None:
             self.heldTarget.move(self.xspeed, self.yspeed)
-            self.heldTarget.update(dt)
+            #self.heldTarget.update(dt)
             
         self.draw()
         

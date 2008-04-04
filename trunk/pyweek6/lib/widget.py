@@ -12,11 +12,12 @@ class Widget(object):
         self.children = []
         
     def on_click(self, x, y):
-        if not self.contains_point(x,y):
-            return False
+        # sometimes children are not within the bounds of the parent (i.e. on the conveyor)
         for child in self.children:
             if child.on_click(x,y):
                 return True
+        if not self.contains_point(x,y):
+            return False
         # the children didn't consume the click so take action
         return self.do_click_action(x,y)
         
