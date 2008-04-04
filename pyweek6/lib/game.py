@@ -4,6 +4,7 @@ from pyglet import image
 from actors import *
 from claw import Claw
 from hud import *
+from timer import Timer
 from pyglet import font as pygletfont
 from actor import Actor
 import data
