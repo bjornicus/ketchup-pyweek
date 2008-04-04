@@ -29,11 +29,12 @@ class Game(event.EventDispatcher):
         #self.add_actor(self.claw)
         conveyor = Conveyor(self)
         self.add_actor(conveyor)
-        conveyor.create_recycle_bin()
+        self.add_actor(RandomPartGenerator(conveyor))
+        self.recyclebin = RecycleBin()
+        self.add_actor(self.recyclebin)
         self.add_actor(PartsBin(self,'head',32,22,188,100)) 
         self.add_actor(PartsBin(self,'body',240,22,188,100))
         self.add_actor(PartsBin(self,'legs',444,22,188,100))
-        self.add_actor(RandomPartGenerator(conveyor))
         self.add_actor(FinishedBin(self))
         self.add_actor(HUD())
 
@@ -51,6 +52,13 @@ class Game(event.EventDispatcher):
     
     def remove_actor(self, actor):
         self.actors.remove(actor)
+
+    def on_recycle_robot(self,robot):
+        self.recyclebin.attach(robot)
+
+    def on_robot_rejected(self,robot):
+        print "robot rejected"
+        self.recyclebin.attach(robot)
 
     def on_key_press(self, symbol, modifiers):
         if symbol == key.ESCAPE:
