@@ -47,5 +47,9 @@ class ClickableActor(Actor, Widget):
     def do_click_action(self,x,y):
         self.dispatch_event('widget_clicked',self)
         return True
-
+        
+    def attach(self,other):
+        self.children.append(other)
+        other.parent = self
+        
 ClickableActor.register_event_type('widget_clicked')
