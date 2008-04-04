@@ -10,9 +10,12 @@ class HUD(Actor):
         self.actors = []
         
     def initComponents(self):
-        self.add_actor(RobotsOrdered(self))
-        self.add_actor(Money(self))
-        self.add_actor(Clock(self))
+        self.ordered = RobotsOrdered(self)
+        self.money = Money(self)
+        self.clock = Clock(self)
+        self.add_actor(self.ordered)
+        self.add_actor(self.money)
+        self.add_actor(self.clock)
     
     def update(self, dt):
         self.draw()

@@ -177,7 +177,7 @@ class FinishedBin(ClickableActor):
             return True
         for order in self.orderlist:
             if robot.head.flavor == order.headflavor and robot.body.flavor == order.bodyflavor and robot.legs.flavor == order.legflavor:
-                self.dispatch_event('on_robot_shiped',robot)
+                self.dispatch_event('on_robot_shipped',robot)
                 self.shippingRobots.append(robot)
                 self.orderlist.remove(order)
                 self.generate_new_order()
@@ -198,7 +198,7 @@ class FinishedBin(ClickableActor):
                 self.shippingRobots.remove(robot)
                 self.dispatch_event('remove_actor',robot)
                 
-FinishedBin.register_event_type('on_robot_shiped')
+FinishedBin.register_event_type('on_robot_shipped')
 FinishedBin.register_event_type('on_robot_rejected')
 
 class RandomPartGenerator(Actor):
