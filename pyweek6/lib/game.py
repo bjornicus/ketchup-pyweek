@@ -64,6 +64,10 @@ class Game(event.EventDispatcher):
         self.beginTime = pygletfont.Text(self.font, "Begins in " + str(self.timer.getSeconds()) + " Seconds", x = 800 / 2, y = 400 - self.font.ascent, halign = pygletfont.Text.CENTER)
         self.levelText.draw()
         self.beginTime.draw()
+        if self.level <= 1:
+            self.hud.clock.timer.set(1,0,False)
+        else:
+            self.hud.clock.timer.set(0,15+(self.level*45),False)
         if self.timer.active == False:
             self.state = 'levelRunning'
             self.dispatch_event('on_level_begin',self.level)
