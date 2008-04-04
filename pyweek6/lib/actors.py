@@ -114,9 +114,9 @@ class PartsBin(ClickableActor):
     def __init__(self,parent,type,x,y,width,height):
         ClickableActor.__init__(self, parent, 'dummy.png', x, y, width, height)
         self.type = type
-        self.children.append(PartsButton(self,1,x,y+height-PartsButton.HEIGHT))
-        self.children.append(PartsButton(self,2,x+PartsButton.WIDTH,y+height-PartsButton.HEIGHT))
-        self.children.append(PartsButton(self,3,x+PartsButton.WIDTH*2,y+height-PartsButton.HEIGHT))
+        self.children.append(PartsButton(self,type,1,x,y+height-PartsButton.HEIGHT))
+        self.children.append(PartsButton(self,type,2,x+PartsButton.WIDTH,y+height-PartsButton.HEIGHT))
+        self.children.append(PartsButton(self,type,3,x+PartsButton.WIDTH*2,y+height-PartsButton.HEIGHT))
         self.buttons = self.children[:] # make a copy of this list for update function
         for button in self.buttons:
             button.push_handlers(self)
@@ -145,8 +145,9 @@ class PartsBin(ClickableActor):
 class PartsButton(ClickableActor):
     HEIGHT = 40
     WIDTH = 60
-    def __init__(self,parent,flavor,x,y):
-        ClickableActor.__init__(self, parent, 'dummy.png', x, y, 0, PartsButton.WIDTH, PartsButton.HEIGHT)
+    def __init__(self,parent,type, flavor,x,y):
+        imageName = RobotPart.partlist[type][flavor] #change this later
+        ClickableActor.__init__(self, parent, imageName, x, y, 0, PartsButton.WIDTH, PartsButton.HEIGHT)
         self.flavor = flavor
 class FinishedBin(ClickableActor):
     class Order(object):
