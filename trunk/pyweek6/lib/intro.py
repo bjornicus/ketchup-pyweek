@@ -9,7 +9,7 @@ class Intro(event.EventDispatcher):
     background = image.load(data.filepath('intro.png'))
     def __init__(self):
         self.timer = Timer()
-        self.timer.expire = self.finish
+        self.timer.on_expire = self.finish
         self.timer.set(0,5,True)
 
     def update(self,dt):

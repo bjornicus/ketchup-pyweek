@@ -38,11 +38,11 @@ class Clock(Actor):
         Actor.__init__(self, x=700, y=parent.y + 50)
         self.font = pygletfont.load('Arial',30)
         self.timer = Timer()
-        self.timer.expire = self.expire
+        self.timer.on_expire = self.on_expire
         self.timer.set(1,0,True)
         self.y = 600 - self.font.ascent
     
-    def expire(self):
+    def on_expire(self):
         self.dispatch_event('on_level_over')
         
     def update(self,dt):
