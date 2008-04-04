@@ -30,6 +30,7 @@ class Game(event.EventDispatcher):
         self.claw = Claw('claw.png')
         self.recyclebin = RecycleBin()
         conveyor = Conveyor(self)
+        self.hud = HUD()
         self.add_actor(conveyor)
         self.add_actor(self.claw)
         self.add_actor(self.recyclebin)
@@ -38,7 +39,7 @@ class Game(event.EventDispatcher):
         self.add_actor(PartsBin(self,'body',240,22,188,100))
         self.add_actor(PartsBin(self,'legs',444,22,188,100))
         self.add_actor(FinishedBin(self))
-        self.add_actor(HUD())
+        self.add_actor(self.hud)
         
         self.level = 1
         self.timer = Timer()
@@ -104,6 +105,9 @@ class Game(event.EventDispatcher):
     def on_robot_rejected(self,robot):
         print "robot rejected"
         self.recyclebin.attach(robot)
+        
+    def on_robot_shipped(self,robot):
+        self.hud.money.deposit(5)
 
     def on_key_press(self, symbol, modifiers):
         if symbol == key.ESCAPE:
