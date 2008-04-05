@@ -126,17 +126,18 @@ Robot.register_event_type('widget_clicked')
 class PartsBin(ClickableActor):
     def __init__(self,parent,type,x,y,width,height):
         ClickableActor.__init__(self, parent, 'dummy.png', x, y, width, height)
+        self.centerX = x+width/2
         self.type = type
-        self.children.append(PartsButton(self,type,1,x,y+height-PartsButton.HEIGHT))
-        self.children.append(PartsButton(self,type,2,x+PartsButton.WIDTH,y+height-PartsButton.HEIGHT))
-        self.children.append(PartsButton(self,type,3,x+PartsButton.WIDTH*2,y+height-PartsButton.HEIGHT))
+        self.children.append(PartsButton(self,type,1,x,y-PartsButton.HEIGHT))
+        self.children.append(PartsButton(self,type,2,x+PartsButton.WIDTH,y-PartsButton.HEIGHT))
+        self.children.append(PartsButton(self,type,3,x+PartsButton.WIDTH*2,y-PartsButton.HEIGHT))
         self.buttons = self.children[:] # make a copy of this list for update function
         for button in self.buttons:
             button.push_handlers(self)
         self.currentRobot = None
 
     def widget_clicked(self,button):
-        newrobot = Robot(self, self.x,self.y)
+        newrobot = Robot(self, self.centerX-32,self.y)
         newrobot.attach_part(RobotPart(self.type,button.flavor))
         if self.currentRobot:
             self.children.remove(self.currentRobot)

@@ -30,7 +30,8 @@ soundManager = SoundManager()
 # uncomment if you want to see all events output ot the terminal
 #from pyglet.window.event import WindowEventLogger
 #win.push_handlers(WindowEventLogger())
-
+clock.set_fps_limit(20)
+fps_display = clock.ClockDisplay()
 
 def main():
     stateManager = StateManager()
@@ -39,6 +40,7 @@ def main():
         win.clear()
         dt = clock.tick()
         stateManager.update(dt)
+        fps_display.draw()
         win.flip()
         soundManager.buffer()
 
