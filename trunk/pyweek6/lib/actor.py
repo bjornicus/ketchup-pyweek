@@ -2,9 +2,15 @@ from pyglet import image
 from pyglet import event
 import data
 
+class DummyImage(object):
+    def blit(self,x,y):
+        pass
+
 class Actor(event.EventDispatcher):
-    ImageDictionary = {}
-    def __init__(self, imageName = 'dummy.png', x = 0, y = 0, z = 0.2, xframes = 1, yframes = 1):
+    ImageDictionary = {"None":[DummyImage()]}
+    def __init__(self, imageName = None, x = 0, y = 0, z = 0.2, xframes = 1, yframes = 1):
+        if imageName is None:
+            imageName = "None"
         if not Actor.ImageDictionary.has_key(imageName):
             myimage = image.load(data.filepath(imageName))
             imageGrid = image.ImageGrid(myimage, yframes, xframes)

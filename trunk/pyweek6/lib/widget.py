@@ -52,7 +52,7 @@ class Widget(object):
         return False
 
 class ClickableActor(Actor, Widget):
-    def __init__(self,parent, imageName="dummy.png", x=0, y=0, z=0, width=1, height=1, xframes = 1, yframes = 1):
+    def __init__(self,parent, imageName=None, x=0, y=0, z=0, width=1, height=1, xframes = 1, yframes = 1):
         Widget.__init__(self,parent,x,y,width,height)
         Actor.__init__(self,imageName,x,y,z,xframes,yframes)
         
@@ -63,10 +63,10 @@ class ClickableActor(Actor, Widget):
         return self.y + self.height/2
     
     def draw(self):
-        self.draw_bounding_box()
-        glColor4f(1, 1, 1, .5) 
+        #self.draw_bounding_box()
+        #glColor4f(1, 1, 1, .5) 
         Actor.draw(self)
-        glColor4f(1, 1, 1, 1) 
+        #glColor4f(1, 1, 1, 1) 
     def draw_bounding_box(self):
         glColor4f(1, 0, 0, .3) # red
         glBegin(GL_LINE_STRIP);

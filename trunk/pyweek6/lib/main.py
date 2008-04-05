@@ -44,7 +44,7 @@ def main():
         win.clear()
         dt = clock.tick()
         stateManager.update(dt)
-        fps_display.draw()
+        #fps_display.draw()
         win.flip()
         soundManager.buffer()
 
@@ -66,8 +66,8 @@ class StateManager(object):
         self.story.push_handlers(self)
         
         #change this back to intro before we ship!
-        self.currentState = self.menu
-        win.push_handlers(self.menu)
+        self.currentState = self.intro
+        win.push_handlers(self.intro)
     
     def update(self, dt):
         self.currentState.update(dt)

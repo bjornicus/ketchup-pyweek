@@ -14,7 +14,7 @@ class Conveyor(ClickableActor): # should inherit from actors as well so we can c
     SPEED = 30. #pixels per second
     ROBOTOFFSET = 10
     def __init__(self, parent):
-        ClickableActor.__init__(self, parent, 'dummy.png', x=0, y=200, z=-0.1, width=730, height=80)
+        ClickableActor.__init__(self, parent, x=0, y=200, z=-0.1, width=730, height=80)
         self.targetX = 0
 
     def do_click_action(self,x,y):
@@ -145,7 +145,7 @@ Robot.register_event_type('widget_clicked')
     
 class PartsBin(ClickableActor):
     def __init__(self,parent,type,x,y,width,height):
-        ClickableActor.__init__(self, parent, 'dummy.png', x, y, width, height)
+        ClickableActor.__init__(self, parent, None, x, y, width, height)
         self.centerX = x+width/2
         self.type = type
         self.children.append(PartsButton(self,type,1,x,y-PartsButton.HEIGHT))
@@ -285,8 +285,8 @@ RandomPartGenerator.register_event_type('add_actor')
 
 
 class TimedActor(Actor):
-    def __init__(self, mins, secs, imageName = 'dummy.png', x = 0, y = 0, z = 0.2, xframes = 1, yframes = 1):
-        Actor.__init__(self,imageName,x,y,z,xframes,yframes)
+    def __init__(self, mins, secs, x = 0, y = 0, z = 0.2, xframes = 1, yframes = 1):
+        Actor.__init__(self,None,x,y,z,xframes,yframes)
         self.timer = Timer()
         self.timer.set(mins,secs,True)
         
