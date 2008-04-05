@@ -72,6 +72,7 @@ class Claw(Actor):
                 self.changeFrame(0)
         elif self.heldTarget: #lets set down the robot
             if self.target.attach(self.heldTarget):
+                self.heldTarget.z=0 #default for conveyor belt robots
                 self.heldTarget = None
                 self.changeFrame(0)
         

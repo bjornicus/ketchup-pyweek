@@ -82,8 +82,8 @@ class RobotPart(Actor):
         self.flavor = flavor
         
 class Robot(ClickableActor):
-    def __init__(self,parent,x,y):
-        ClickableActor.__init__(self, parent, x=x, y=y, width=64, height=192)
+    def __init__(self,parent,x,y,z=0):
+        ClickableActor.__init__(self, parent, x=x, y=y, z=z, width=64, height=192)
         self.head = None
         self.body = None
         self.legs = None
@@ -157,7 +157,7 @@ class PartsBin(ClickableActor):
         self.currentRobot = None
 
     def widget_clicked(self,button):
-        newrobot = Robot(self, self.centerX-32,self.y)
+        newrobot = Robot(self, self.centerX-32,self.y, z = 0.1) #so it's drawn on top of conveyor robots
         newrobot.attach_part(RobotPart(self.type,button.flavor))
         if self.currentRobot:
             self.children.remove(self.currentRobot)
@@ -297,7 +297,6 @@ class TimedActor(Actor):
         self.timer.set(mins,secs,True)
         
     def update(self,dt):
-        print "timed actor updated!"
         self.timer.update(dt)
         self.draw()
         if self.timer.active == False:
