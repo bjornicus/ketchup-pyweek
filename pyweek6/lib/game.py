@@ -23,8 +23,8 @@ parts bins,
 and finish shelf
 """
 class Game(event.EventDispatcher):
-    levelAnnouncementColor = (0,0,1.0,1.0)
-    levelStatsColor = (0,1.0,0,1.0)
+    levelAnnouncementColor = (0,0,0.0,1.0)
+    levelStatsColor = (1,0.0,0,1.0)
     gameOverColor = (1.0,0,0,1.0)
     def __init__(self):
         self.actors = []
@@ -69,7 +69,7 @@ class Game(event.EventDispatcher):
         elif self.state == 'levelOver':
             self.levelOverState(dt)
         elif self.state == 'gameOver':
-            self.levelOverState(dt)
+            self.gameOverState(dt)
         
     def levelBeginState(self,dt):
         self.timer.update(dt)
@@ -102,6 +102,10 @@ class Game(event.EventDispatcher):
                 self.hud.clock.timer.set(0,15+(self.level*45),False)
                 self.hud.robotsordered.set(self.level*1.5)
                 self.finishbin.generate_new_order(self.level*1.5)
+                
+    def gameOverState(self,dt):
+        pass
+        
             
     def updateActors(self,dt):
         for actor in self.actors:
@@ -151,6 +155,11 @@ class Game(event.EventDispatcher):
         print "click (%i,%i)" %(x,y)
         for item in self.widgets:
             if item.on_click(x,y):
+                return True
+                
+    def on_mouse_motion(self, x, y, dx, dy):
+        for item in self.widgets:
+            if item.on_move(x,y,dx,dy):
                 return True
                 
     def on_level_over(self):

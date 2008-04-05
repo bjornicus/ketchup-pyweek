@@ -12,7 +12,7 @@ class Claw(Actor):
         self.holding = False
         self.target = None
         self.heldTarget = None
-        self.speed = 200.0
+        self.speed = 150.0
         self.dir = 0
         self.xspeed = 0
         self.yspeed = 0
@@ -93,7 +93,7 @@ class Claw(Actor):
             
     def returnToTop(self,dt):
         speed = self.speed * dt
-        self.yspeed = speed * self.ydir
+        self.yspeed = speed * self.ydir * 2
         self.move(0,self.yspeed)
         
         
