@@ -25,6 +25,13 @@ class Conveyor(ClickableActor): # should inherit from actors as well so we can c
             if robot.x > self.width:
                 self.dispatch_event('on_recycle_robot',robot)
                 self.children.remove(robot)
+                
+    def clearRobots(self):
+        #is there an easier way to clear a list?
+        while len(self.children) > 0:
+            robot = self.children.pop()
+            robot.move(0,-100)
+            self.dispatch_event('on_recycle_robot',robot)
 Conveyor.register_event_type('on_recycle_robot')
 
 class RecycleBin(Actor):
@@ -169,11 +176,9 @@ class FinishedBin(ClickableActor):
             self.body.image[0].blit(x,y+32,width=ORDER_IMAGE_WIDTH,height=32)
             self.head.image[0].blit(x,y+64,width=ORDER_IMAGE_WIDTH,height=32)
             
-    def __init__(self,parent, numOrders = 4): 
+    def __init__(self,parent): 
         ClickableActor.__init__(self, parent,x=630, y=340, z=0.5, width=150, height=110)
         self.orderlist = []
-        for x in range(numOrders):
-            self.generate_new_order()
         self.shippingRobots = []
     def attach(self,robot):
         if len(robot.parts) != 3:
@@ -184,14 +189,15 @@ class FinishedBin(ClickableActor):
                 self.dispatch_event('on_robot_shipped',robot)
                 self.shippingRobots.append(robot)
                 self.orderlist.remove(order)
-                self.generate_new_order()
+                #self.generate_new_order()
                 return True
         self.dispatch_event('on_robot_rejected',robot)
         return True
-    def generate_new_order(self):
-        newOrder = FinishedBin.Order(random.randint(1,3),random.randint(1,3),random.randint(1,3))
-        print "head: %d\nBody: %d\nLegs: %d\n"%(newOrder.headflavor,newOrder.bodyflavor,newOrder.legflavor) 
-        self.orderlist.append(newOrder)
+    def generate_new_order(self,numOrders):
+        for x in range(numOrders):
+            newOrder = FinishedBin.Order(random.randint(1,3),random.randint(1,3),random.randint(1,3))
+            print "head: %d\nBody: %d\nLegs: %d\n"%(newOrder.headflavor,newOrder.bodyflavor,newOrder.legflavor) 
+            self.orderlist.append(newOrder)
     def update(self,dt):
         Actor.update(self,dt)
         for i in range(len(self.orderlist)):
