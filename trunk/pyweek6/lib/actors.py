@@ -41,6 +41,11 @@ class RecycleBin(Actor):
         self.robots = []
     def attach(self, robot):
         self.robots.append(robot)
+        ta = TimedActor(0,1,'Explode.png')
+        ta.x = self.x
+        ta.y = self.y + (self.image[0].height/2)
+        #remove the robot and and add the flare
+        self.dispatch_event('add_actor',ta)
     def update(self,dt):
         Actor.update(self,dt)
         for robot in self.robots:
@@ -203,9 +208,9 @@ class FinishedBin(ClickableActor):
                 self.dispatch_event('on_robot_shipped',robot)
                 self.orderlist.remove(order)
                 #replace the robot with a tiny, temporary effect
-                ta = TimedActor(0,2,'Explode.png')
-                ta.x = robot.x + (abs(robot.width-ta.image[0].width)/2)
-                ta.y = robot.y + (abs(robot.height-ta.image[0].height)/2)
+                ta = TimedActor(0,1,'Finsh.png')
+                ta.x = robot.x
+                ta.y = robot.y
                 #remove the robot and and add the flare
                 self.dispatch_event('add_actor',ta)
                 self.dispatch_event('remove_actor',robot)
