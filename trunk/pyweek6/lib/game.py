@@ -42,6 +42,7 @@ class Game(event.EventDispatcher):
         self.add_actor(PartsBin(self,'head',32,70,188,60)) 
         self.add_actor(PartsBin(self,'body',240,70,188,60))
         self.add_actor(PartsBin(self,'legs',444,70,188,60))
+        self.add_actor(FinishTag())
         self.add_actor(self.finishbin)
         self.add_actor(self.hud)
         
