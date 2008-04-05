@@ -21,7 +21,6 @@ class Claw(Actor):
         self.xdir = 1
         
     def widget_clicked(self, clickable):
-        print "event caught by claw!"
         if not self.heldTarget and not isinstance(clickable, Robot):
             return False
         self.tracking = True
