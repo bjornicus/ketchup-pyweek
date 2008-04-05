@@ -57,10 +57,10 @@ class ClickableActor(Actor, Widget):
         Actor.__init__(self,imageName,x,y,z,xframes,yframes)
         
     #these are next two are for the claw:
-    def targetX(self):
-        return self.x
-    def targetY(self):
-        return self.y
+    def centerX(self):
+        return self.x + self.width/2
+    def centerY(self):
+        return self.y + self.height/2
     
     def draw(self):
         self.draw_bounding_box()
