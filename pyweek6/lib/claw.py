@@ -2,6 +2,7 @@ from pyglet import event
 from widget import ClickableActor
 from actor import Actor
 from actors import Robot
+from actors import FinishedBin
 
 
 class Claw(Actor):
@@ -43,6 +44,13 @@ class Claw(Actor):
             
         if self.heldTarget != None:
             self.heldTarget.move(self.xspeed, self.yspeed)
+            
+        #perform correction to get the claw into the right position
+        if self.y > 500 - self.image[self.currentFrame].height:
+            self.yspeed = 500 - self.image[self.currentFrame].height - self.y
+            self.move(0,self.yspeed)
+            if self.heldTarget:
+                self.heldTarget.move(0, self.yspeed)
             
         self.draw()
         
@@ -89,14 +97,16 @@ class Claw(Actor):
         self.yspeed = min(speed,abs(distance)) * self.ydir
         
         self.move(self.xspeed,self.yspeed)
-        if( abs(targetX - self.x) < 1 and abs(targetHighY - selfHighY) < 1 ):
+        #small hack to get the new claw to drop off stuff at the finished bin
+        maxYdiff = 1
+        if isinstance(self.target,FinishedBin):
+            maxYdiff = 64
+        if( abs(targetX - self.x) < 1 and abs(targetHighY - selfHighY) < maxYdiff ):
             self.finishTracking()
             
     def returnToTop(self,dt):
         speed = self.speed * dt
         self.yspeed = speed * self.ydir * 2
         self.move(0,self.yspeed)
-        if self.y > 500:
-            self.y = 500
         
         
