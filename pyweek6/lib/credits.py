@@ -24,6 +24,12 @@ class Credits(event.EventDispatcher):
         for text in self.textList:
             text.y += text_speed * dt
             text.draw()
+            if text.y > 600:
+                self.creditsFinished = True
+            else:
+                self.creditsFinished = False
+        if self.creditsFinished == True:
+            self.dispatch_event('on_intro_finish')
             
     def centerText(self, size):
         return (800-(size*18))/2
