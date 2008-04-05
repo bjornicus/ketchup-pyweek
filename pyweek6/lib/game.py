@@ -36,7 +36,6 @@ class Game(event.EventDispatcher):
         self.hud = HUD()
         self.finishbin = FinishedBin(self)
         self.add_actor(self.conveyor)
-        self.add_actor(self.claw)
         self.add_actor(self.recyclebin)
         self.add_actor(RandomPartGenerator(self.conveyor))
         self.add_actor(PartsBin(self,'head',32,70,188,60)) 
@@ -44,6 +43,7 @@ class Game(event.EventDispatcher):
         self.add_actor(PartsBin(self,'legs',444,70,188,60))
         self.add_actor(self.finishbin)
         self.add_actor(FinishTag())
+        self.add_actor(self.claw)
         self.add_actor(self.hud)
         
         self.level = 1
