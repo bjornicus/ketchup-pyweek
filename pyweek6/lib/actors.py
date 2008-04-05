@@ -158,8 +158,8 @@ class PartsBin(ClickableActor):
 PartsBin.register_event_type('on_parts_ordered')
 
 class PartsButton(ClickableActor):
-    HEIGHT = 40
-    WIDTH = 60
+    HEIGHT = 64
+    WIDTH = 64
     buttonImages = {'head':{1:'RedHeadIdle.png', 2:'BlueHeadIdle.png',3:'GreenHeadIdle.png'}, 
                 'body':{1:'RedBodyIdle.png', 2:'BlueBodyIdle.png',3:'GreenBodyIdle.png'},
                 'legs':{1:'RedLegsIdle.png', 2:'BlueLegsIdle.png',3:'GreenLegsIdle.png'}}

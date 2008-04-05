@@ -13,9 +13,14 @@ from sound import SoundManager
 from pyglet import window
 from pyglet import clock
 from pyglet import event
+from pyglet import image
 from pyglet.gl import *
+import data
 
 win = window.Window(width=800, height=600, resizable=False)
+img = image.load(data.filepath('mouse.png'))
+cursor = window.ImageMouseCursor(img, 0, 32)
+win.set_mouse_cursor(cursor)
 glEnable(GL_BLEND)
 glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
 soundManager = SoundManager()
