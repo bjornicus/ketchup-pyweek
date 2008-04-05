@@ -1,5 +1,6 @@
 from pyglet import event
 from pyglet import font as pygletfont
+from actor import Actor
 from pyglet.window import key
 from widget import Widget
 
@@ -10,7 +11,8 @@ class MenuItem(Widget):
         self.action = action
 
     def draw(self):
-        self.drawable.draw()
+        pass
+        #self.drawable.draw()
         
     def do_click_action(self,x,y):
         return True
@@ -30,14 +32,15 @@ class Menu(event.EventDispatcher):
         self.font = pygletfont.load('Arial', 36)
         self.children = []
         self.menuItems = self.children
-        MenuItem(self, pygletfont.Text(self.font,"Start Game"),'on_new_game')
-        MenuItem(self, pygletfont.Text(self.font,"Story Mode"),'on_new_story_game')
-        MenuItem(self, pygletfont.Text(self.font,"Credits"),'on_credits')
-        MenuItem(self, pygletfont.Text(self.font,"Exit"),'on_exit_program')
+        MenuItem(self, pygletfont.Text(self.font,"Start Game", x = 85, y = 277, color = (0,0,0,1)),'on_new_game')
+        MenuItem(self, pygletfont.Text(self.font,"Story Mode", x = 85, y = 210, color = (0,0,0,1)),'on_new_story_game')
+        MenuItem(self, pygletfont.Text(self.font,"Credits Mo", x = 85, y = 143, color = (0,0,0,1)),'on_credits')
+        MenuItem(self, pygletfont.Text(self.font,"Exity Mode", x = 85, y = 76, color = (0,0,0,1)),'on_exit_program')
         #only want 'resume game' showing when there is a game to resume
         self.resume_game_item = MenuItem(self, pygletfont.Text(self.font,"Resume Game"),'on_resume_game')
         self.disable_resume() 
-        self.align_menu_items()
+        #self.align_menu_items()
+        self.menuImage = Actor("title.png")
         
     def align_menu_items(self):
         menuheight = self.menuItems[0].height*(len(self.menuItems))
@@ -50,13 +53,14 @@ class Menu(event.EventDispatcher):
     def enable_resume(self):
         if not self.resume_game_item in self.menuItems:
             self.menuItems.insert(1,self.resume_game_item)
-            self.align_menu_items()
+            #self.align_menu_items()
         
     def disable_resume(self):
         self.menuItems.remove(self.resume_game_item) 
-        self.align_menu_items()
+        #self.align_menu_items()
     
     def update(self,dt):
+        self.menuImage.update(dt)
         for item in self.menuItems:
             item.draw()
         
