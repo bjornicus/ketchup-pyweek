@@ -39,9 +39,9 @@ class Game(event.EventDispatcher):
         self.add_actor(self.claw)
         self.add_actor(self.recyclebin)
         self.add_actor(RandomPartGenerator(self.conveyor))
-        self.add_actor(PartsBin(self,'head',32,22,188,100)) 
-        self.add_actor(PartsBin(self,'body',240,22,188,100))
-        self.add_actor(PartsBin(self,'legs',444,22,188,100))
+        self.add_actor(PartsBin(self,'head',32,70,188,60)) 
+        self.add_actor(PartsBin(self,'body',240,70,188,60))
+        self.add_actor(PartsBin(self,'legs',444,70,188,60))
         self.add_actor(self.finishbin)
         self.add_actor(self.hud)
         
