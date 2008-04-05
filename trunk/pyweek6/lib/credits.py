@@ -31,6 +31,12 @@ class Credits(event.EventDispatcher):
         if self.creditsFinished == True:
             self.dispatch_event('on_intro_finish')
             
+    def reset(self):
+        sy = -text_size
+        for text in self.textList:
+            text.y = sy
+            sy -= text_offset
+
     def centerText(self, size):
         return (800-(size*18))/2
         

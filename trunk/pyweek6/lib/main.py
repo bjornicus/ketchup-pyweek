@@ -110,6 +110,7 @@ class StateManager(object):
         
     def on_credits(self):
         win.pop_handlers()
+        self.credits.reset()
         self.currentState = self.credits
         win.push_handlers(self.credits)
         
