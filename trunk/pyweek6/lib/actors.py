@@ -209,8 +209,8 @@ class FinishedBin(ClickableActor):
                 self.orderlist.remove(order)
                 #replace the robot with a tiny, temporary effect
                 ta = TimedActor(0,1,'Finsh.png')
-                ta.x = robot.x
-                ta.y = robot.y
+                ta.x = self.x
+                ta.y = self.y
                 #remove the robot and and add the flare
                 self.dispatch_event('add_actor',ta)
                 self.dispatch_event('remove_actor',robot)

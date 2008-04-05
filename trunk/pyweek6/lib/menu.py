@@ -31,6 +31,7 @@ class Menu(event.EventDispatcher):
         self.children = []
         self.menuItems = self.children
         MenuItem(self, pygletfont.Text(self.font,"Start Game"),'on_new_game')
+        MenuItem(self, pygletfont.Text(self.font,"Story Mode"),'on_new_story_game')
         MenuItem(self, pygletfont.Text(self.font,"Credits"),'on_credits')
         MenuItem(self, pygletfont.Text(self.font,"Exit"),'on_exit_program')
         #only want 'resume game' showing when there is a game to resume
@@ -70,6 +71,7 @@ class Menu(event.EventDispatcher):
                 return True
 
 Menu.register_event_type('on_new_game')
+Menu.register_event_type('on_new_story_game')
 Menu.register_event_type('on_resume_game')
 Menu.register_event_type('on_exit_program')
 Menu.register_event_type('on_credits')
