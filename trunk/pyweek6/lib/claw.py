@@ -12,7 +12,7 @@ class Claw(Actor):
         self.holding = False
         self.target = None
         self.heldTarget = None
-        self.speed = 100.0
+        self.speed = 200.0
         self.dir = 0
         self.xspeed = 0
         self.yspeed = 0
@@ -23,7 +23,7 @@ class Claw(Actor):
         print "event caught by claw!"
         if not self.heldTarget and not isinstance(clickable, Robot):
             return False
-        if self.tracking == False:
+        if self.tracking == False or self.heldTarget == None:
             self.tracking = True
             self.target = clickable
         return True
