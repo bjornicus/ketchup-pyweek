@@ -61,7 +61,10 @@ class Game(event.EventDispatcher):
         self.finishbin.generate_new_order(1)
 
     def update(self,dt):
-        self.background.blit(0,0,-0.9)
+        if self.state == 'gameOver':
+            self.background.blit(200,100,-0.9)
+        else:
+            self.background.blit(0,0,-0.9)
         if self.state == 'levelBegin':
             self.levelBeginState(dt)
         elif self.state == 'levelRunning':
@@ -104,8 +107,11 @@ class Game(event.EventDispatcher):
                 self.finishbin.generate_new_order(self.level*1.5)
                 
     def gameOverState(self,dt):
-        pass
-        
+        self.timer.update(dt)
+        self.levelText.draw()
+        self.levelInfoText.draw()
+        if self.timer.active == False:
+            self.dispatch_event("on_game_over")
             
     def updateActors(self,dt):
         for actor in self.actors:
@@ -146,6 +152,9 @@ class Game(event.EventDispatcher):
         self.hud.money.withdraw(1)
 
     def on_key_press(self, symbol, modifiers):
+        if self.state == 'gameOver':
+            self.dispath_event('on_game_over')
+            return True
         if symbol == key.ESCAPE:
             self.dispatch_event('on_quit')
             return True
@@ -153,6 +162,9 @@ class Game(event.EventDispatcher):
     def on_mouse_press(self, x, y, button, modifiers):
         #find out which item was clicked
         print "click (%i,%i)" %(x,y)
+        if self.state == 'gameOver':
+            self.dispath_event('on_game_over')
+            return True
         for item in self.widgets:
             if item.on_click(x,y):
                 return True
@@ -180,11 +192,12 @@ class Game(event.EventDispatcher):
     
     def on_level_lost(self):
         self.state = 'gameOver'
-        self.levelText = pygletfont.Text(self.font, "GAME OVER!", x = 800 / 2, y = 400, halign = pygletfont.Text.CENTER)
+        self.levelText = pygletfont.Text(self.font, "GAME OVER!", x = 800 / 2, y = 580-self.font.ascent, halign = pygletfont.Text.CENTER)
         self.levelText.color = self.gameOverColor
-        self.levelInfoText = pygletfont.Text(self.fontsmall, "Out of Time!" , x = 800 / 2, y = 400 - self.font.ascent, halign = pygletfont.Text.CENTER)
+        self.levelInfoText = pygletfont.Text(self.fontsmall, "Out of Time!" , x = 800 / 2, y = self.levelText.y - self.font.ascent, halign = pygletfont.Text.CENTER)
         self.levelInfoText.color = self.gameOverColor
-        self.timer.set(0,10,True)
+        self.background = image.load(data.filepath("RobotRubbish01.png"))
+        self.timer.set(0,7,True)
 
 Game.register_event_type('on_pause')
 Game.register_event_type('on_quit')
