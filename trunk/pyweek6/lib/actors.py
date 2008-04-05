@@ -285,10 +285,7 @@ RandomPartGenerator.register_event_type('add_actor')
 
 class FinishTag(Actor):
     def __init__(self):
-        Actor.__init__(self,imageName='finishTag.png',x=465,y=600)
-        
-    def update(self,dt):
-        self.draw()
+        Actor.__init__(self,imageName='finishTag.png',x=675,y=460,z=1)
 
 class TimedActor(Actor):
     def __init__(self, mins, secs, imageName = None, x = 0, y = 0, z = 0.2, xframes = 1, yframes = 1):
