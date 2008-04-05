@@ -35,6 +35,7 @@ class Story(event.EventDispatcher):
         return True
 
     def finish(self):
+        self.currentStage = 0
         self.dispatch_event('on_new_game')
         
     def nextStage(self):
