@@ -32,13 +32,13 @@ class Game(event.EventDispatcher):
         self.background = image.load(data.filepath("Env09.png"))
         self.claw = Claw('claw.png')
         self.recyclebin = RecycleBin()
-        conveyor = Conveyor(self)
+        self.conveyor = Conveyor(self)
         self.hud = HUD()
         self.finishbin = FinishedBin(self)
-        self.add_actor(conveyor)
+        self.add_actor(self.conveyor)
         self.add_actor(self.claw)
         self.add_actor(self.recyclebin)
-        self.add_actor(RandomPartGenerator(conveyor))
+        self.add_actor(RandomPartGenerator(self.conveyor))
         self.add_actor(PartsBin(self,'head',32,22,188,100)) 
         self.add_actor(PartsBin(self,'body',240,22,188,100))
         self.add_actor(PartsBin(self,'legs',444,22,188,100))
@@ -54,6 +54,11 @@ class Game(event.EventDispatcher):
         self.levelText = pygletfont.Text(self.font, "Level %i" %self.level, x = 800 / 2, y = 400, halign = pygletfont.Text.CENTER)
         self.levelText.color = self.levelAnnouncementColor
         self.state = 'levelBegin'
+        
+        #set things up for level 1
+        self.hud.clock.timer.set(1,0,False)
+        self.hud.robotsordered.set(1)
+        self.finishbin.generate_new_order(1)
 
     def update(self,dt):
         self.background.blit(0,0,-0.9)
@@ -73,12 +78,7 @@ class Game(event.EventDispatcher):
         self.beginTime.color = self.levelAnnouncementColor
         self.levelText.draw()
         self.beginTime.draw()
-        if self.level <= 1:
-            self.hud.clock.timer.set(1,0,False)
-            self.hud.robotsordered.set(1)
-        else:
-            self.hud.clock.timer.set(0,15+(self.level*45),False)
-            self.hud.robotsordered.set(self.level*1.5)
+        
         if self.timer.active == False:
             self.state = 'levelRunning'
             self.dispatch_event('on_level_begin',self.level)
@@ -98,6 +98,10 @@ class Game(event.EventDispatcher):
                 self.levelText.color = self.levelAnnouncementColor
                 self.timer.set(0,5,True)
                 self.state = 'levelBegin'
+                #get the HUD ready for the next level
+                self.hud.clock.timer.set(0,15+(self.level*45),False)
+                self.hud.robotsordered.set(self.level*1.5)
+                self.finishbin.generate_new_order(self.level*1.5)
             
     def updateActors(self,dt):
         for actor in self.actors:
@@ -150,6 +154,8 @@ class Game(event.EventDispatcher):
                 return True
                 
     def on_level_over(self):
+        #clear the robot parts off the conveyor belt
+        self.conveyor.clearRobots()
         if self.hud.robotsordered.remaining == 0:
             self.dispatch_event('on_level_completed')
         else:
