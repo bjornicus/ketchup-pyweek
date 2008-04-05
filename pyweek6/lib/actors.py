@@ -56,6 +56,7 @@ class RecycleBin(Actor):
         Actor.__init__(self,imageName = 'recycleBin01.png',x=696,y=1)
         self.robots = []
     def attach(self, robot):
+        robot.parent = self
         self.robots.append(robot)
         ta = TimedActor(0,1,'Explode.png')
         ta.x = self.x

@@ -1,7 +1,7 @@
 from pyglet import event
 from widget import ClickableActor
 from actor import Actor
-from actors import Robot, Conveyor
+from actors import Robot, Conveyor, RecycleBin
 from actors import FinishedBin
 
 
@@ -35,7 +35,13 @@ class Claw(Actor):
         self.ydir = 1
         
         if self.tracking == True:
-            self.track(dt)
+            if isinstance(self.target.parent, RecycleBin):
+                print "recycled!"
+                self.target = None
+                self.tracking = False
+                self.returnToTop(dt)
+            else:
+                self.track(dt)
                 
         elif self.y < 500 - self.image[self.currentFrame].height:
             self.returnToTop(dt)
