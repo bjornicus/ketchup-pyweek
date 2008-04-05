@@ -20,9 +20,9 @@ import data
 
 import pyglet
 #uncomment the next line for ship release:
-#pyglet.options['debug_gl'] = False
+pyglet.options['debug_gl'] = False
 
-win = window.Window(width=800, height=600, resizable=False)
+win = window.Window(width=800, height=600, resizable=False, caption="Ketchup's Bot Builder 2000")
 img = image.load(data.filepath('mouse.png'))
 cursor = window.ImageMouseCursor(img, 0, 32)
 win.set_mouse_cursor(cursor)

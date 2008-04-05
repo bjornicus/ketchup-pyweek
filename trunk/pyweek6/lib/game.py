@@ -165,7 +165,6 @@ class Game(event.EventDispatcher):
 
     def on_mouse_press(self, x, y, button, modifiers):
         #find out which item was clicked
-        print "click (%i,%i)" %(x,y)
         if self.state == 'gameOver':
             self.dispatch_event('on_game_over')
             return True

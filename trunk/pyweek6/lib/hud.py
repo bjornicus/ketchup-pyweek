@@ -6,7 +6,7 @@ from timer import Timer
 
 class HUD(Actor):
     def __init__(self):
-        Actor.__init__(self, imageName = 'dummy.png', y=500)
+        Actor.__init__(self, y=500)
         self.actors = []
         
     def initComponents(self):

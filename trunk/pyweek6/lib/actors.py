@@ -18,7 +18,6 @@ class Conveyor(ClickableActor): # should inherit from actors as well so we can c
         self.targetX = 0
 
     def do_click_action(self,x,y):
-        print "clicked the conveyor at (%i,%i) " %(x,y)
         self.targetX = x
         ClickableActor.do_click_action(self,x,y)
 
@@ -241,7 +240,7 @@ class FinishedBin(ClickableActor):
     def generate_new_order(self,numOrders):
         for x in range(numOrders):
             newOrder = FinishedBin.Order(random.randint(1,3),random.randint(1,3),random.randint(1,3))
-            print "head: %d\nBody: %d\nLegs: %d\n"%(newOrder.headflavor,newOrder.bodyflavor,newOrder.legflavor) 
+            #print "head: %d\nBody: %d\nLegs: %d\n"%(newOrder.headflavor,newOrder.bodyflavor,newOrder.legflavor) 
             self.orderlist.append(newOrder)
     def update(self,dt):
         Actor.update(self,dt)
