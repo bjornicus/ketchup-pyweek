@@ -3,6 +3,7 @@ from pyglet import clock
 from pyglet import image
 from widget import ClickableActor
 from actor import Actor
+from timer import Timer
 from pyglet.gl import *
 import random
     
@@ -154,10 +155,19 @@ PartsBin.register_event_type('on_parts_ordered')
 class PartsButton(ClickableActor):
     HEIGHT = 40
     WIDTH = 60
+    buttonImages = {'head':{1:'RedHeadIdle.png', 2:'BlueHeadIdle.png',3:'GreenHeadIdle.png'}, 
+                'body':{1:'RedBodyIdle.png', 2:'BlueBodyIdle.png',3:'GreenBodyIdle.png'},
+                'legs':{1:'RedLegsIdle.png', 2:'BlueLegsIdle.png',3:'GreenLegsIdle.png'}}
     def __init__(self,parent,type, flavor,x,y):
-        imageName = RobotPart.partlist[type][flavor] #change this later
-        ClickableActor.__init__(self, parent, imageName, x, y, 0, PartsButton.WIDTH, PartsButton.HEIGHT)
+        imageName = PartsButton.buttonImages[type][flavor] #change this later
+        ClickableActor.__init__(self, parent, imageName, x, y, 0, PartsButton.WIDTH, PartsButton.HEIGHT, xframes = 1, yframes = 1)
         self.flavor = flavor
+        self.mouseOver = False
+        self.prevMouseX = 0
+        self.prevMouseY = 0
+        
+    def do_mouseOver_action(self, x,y,dx,dy):
+        return False
         
 
 class FinishedBin(ClickableActor):
@@ -187,9 +197,14 @@ class FinishedBin(ClickableActor):
         for order in self.orderlist:
             if robot.head.flavor == order.headflavor and robot.body.flavor == order.bodyflavor and robot.legs.flavor == order.legflavor:
                 self.dispatch_event('on_robot_shipped',robot)
-                self.shippingRobots.append(robot)
                 self.orderlist.remove(order)
-                #self.generate_new_order()
+                #replace the robot with a tiny, temporary effect
+                ta = TimedActor(0,2,'Explodepng')
+                ta.x = robot.x + (abs(robot.width-ta.image[0].width)/2)
+                ta.y = robot.y + (abs(robot.height-ta.image[0].height)/2)
+                #remove the robot and and add the flare
+                self.dispatch_event('add_actor',ta)
+                self.dispatch_event('remove_actor',robot)
                 return True
         self.dispatch_event('on_robot_rejected',robot)
         return True
@@ -202,11 +217,6 @@ class FinishedBin(ClickableActor):
         Actor.update(self,dt)
         for i in range(len(self.orderlist)):
             self.orderlist[i].draw((i*ORDER_IMAGE_WIDTH)+304,500)
-        for robot in self.shippingRobots:
-            robot.move(100*dt,0)
-            if robot.x > self.x+self.width:
-                self.shippingRobots.remove(robot)
-                self.dispatch_event('remove_actor',robot)
                 
 FinishedBin.register_event_type('on_robot_shipped')
 FinishedBin.register_event_type('on_robot_rejected')
@@ -236,3 +246,19 @@ class RandomPartGenerator(Actor):
                 self.currentRobot = None
     
 RandomPartGenerator.register_event_type('add_actor')
+
+
+class TimedActor(Actor):
+    def __init__(self, mins, secs, imageName = 'dummy.png', x = 0, y = 0, z = 0.2, xframes = 1, yframes = 1):
+        Actor.__init__(self,imageName,x,y,z,xframes,yframes)
+        self.timer = Timer()
+        self.timer.set(mins,secs,True)
+        
+    def update(self,dt):
+        self.timer.update(dt)
+        if self.timer.active == True:
+            self.draw()
+        else:
+            self.dispatch_event('remove_actor',self)
+            
+TimedActor.register_event_type('remove_actor')

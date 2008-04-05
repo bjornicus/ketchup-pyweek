@@ -10,6 +10,7 @@ class Widget(object):
         self.width = width
         self.height = height
         self.children = []
+        self.mouseOver = False
         
     def on_click(self, x, y):
         # sometimes children are not within the bounds of the parent (i.e. on the conveyor)
@@ -30,6 +31,23 @@ class Widget(object):
 
     #override this method in inherited class
     def do_click_action(self,x,y):
+        return False
+        
+    #code for detecting and responding to mouse overs
+    def on_move(self, x, y, dx, dy):
+        # sometimes children are not within the bounds of the parent (i.e. on the conveyor)
+        for child in self.children:
+            if child.on_move(x,y,dx,dy):
+                return True
+        if not self.contains_point(x,y):
+            self.mouseOver = False
+            return False
+        # the children didn't consume the click so take action
+        return self.do_mouseOver_action(x,y,dx,dy)
+        
+    #override this
+    def do_mouseOver_action(self, x,y,dx,dy):
+        self.mouseOver = True
         return False
 
 class ClickableActor(Actor, Widget):
