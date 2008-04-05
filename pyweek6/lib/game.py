@@ -152,8 +152,12 @@ class Game(event.EventDispatcher):
         self.hud.money.withdraw(1)
 
     def on_key_press(self, symbol, modifiers):
-        if self.state == 'gameOver':
-            self.dispath_event('on_game_over')
+        if self.state == 'levelRunning':
+            if symbol == key.PAUSE or symbol == key.SPACE:
+                self.dispatch_event('on_quit')
+                return True
+        elif self.state == 'gameOver':
+            self.dispatch_event('on_game_over')
             return True
         if symbol == key.ESCAPE:
             self.dispatch_event('on_quit')
@@ -163,7 +167,7 @@ class Game(event.EventDispatcher):
         #find out which item was clicked
         print "click (%i,%i)" %(x,y)
         if self.state == 'gameOver':
-            self.dispath_event('on_game_over')
+            self.dispatch_event('on_game_over')
             return True
         for item in self.widgets:
             if item.on_click(x,y):
