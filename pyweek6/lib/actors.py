@@ -95,7 +95,7 @@ class Robot(ClickableActor):
             
     
     def draw(self): # we don't actually draw the robot, it just holds the parts
-        self.draw_bounding_box()
+        #self.draw_bounding_box()
         for part in self.parts:
             part.draw()
             
