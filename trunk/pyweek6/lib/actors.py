@@ -160,14 +160,18 @@ class PartsButton(ClickableActor):
                 'legs':{1:'RedLegsIdle.png', 2:'BlueLegsIdle.png',3:'GreenLegsIdle.png'}}
     def __init__(self,parent,type, flavor,x,y):
         imageName = PartsButton.buttonImages[type][flavor] #change this later
-        ClickableActor.__init__(self, parent, imageName, x, y, 0, PartsButton.WIDTH, PartsButton.HEIGHT, xframes = 1, yframes = 1)
+        ClickableActor.__init__(self, parent, imageName, x, y, 0, PartsButton.WIDTH, PartsButton.HEIGHT, xframes = 2, yframes = 1)
         self.flavor = flavor
         self.mouseOver = False
         self.prevMouseX = 0
         self.prevMouseY = 0
         
-    def do_mouseOver_action(self, x,y,dx,dy):
-        return False
+    def update(self,dt):
+        if self.mouseOver == True:
+            self.changeFrame(1)
+        else:
+            self.changeFrame(0)
+        ClickableActor.update(self,dt)
         
 
 class FinishedBin(ClickableActor):

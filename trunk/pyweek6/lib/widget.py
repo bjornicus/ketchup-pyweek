@@ -10,7 +10,7 @@ class Widget(object):
         self.width = width
         self.height = height
         self.children = []
-        self.mouseOver = False
+        self.frame = 1
         
     def on_click(self, x, y):
         # sometimes children are not within the bounds of the parent (i.e. on the conveyor)
