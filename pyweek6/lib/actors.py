@@ -251,8 +251,9 @@ class RandomPartGenerator(Actor):
     def update(self,dt):
         Actor.update(self,dt)
         if self.currentRobot:
-            self.currentRobot.move(0,-FALLSPEED*dt)
-            if self.currentRobot.y < self.targetConveyor.y + 10:
+            distance = self.currentRobot.y - (self.targetConveyor.y + 10)
+            self.currentRobot.move(0,-min(FALLSPEED*dt,distance))
+            if distance < 1:
                 self.currentRobot = None
     
 RandomPartGenerator.register_event_type('add_actor')
