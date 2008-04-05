@@ -10,6 +10,7 @@ from menu import Menu
 from game import Game
 from credits import Credits
 from sound import SoundManager
+from story import Story
 from pyglet import window
 from pyglet import clock
 from pyglet import event
@@ -55,6 +56,8 @@ class StateManager(object):
         self.credits = Credits()
         self.credits.push_handlers(self)
         
+        self.story = Story()
+        
         #change this back to intro before we ship!
         self.currentState = self.menu
         win.push_handlers(self.menu)
@@ -84,6 +87,9 @@ class StateManager(object):
         win.push_handlers(self.game)
         self.menu.enable_resume()
         self.play_music()
+        
+    def on_new_story_game(self):
+        self.on_new_game()
         
     def on_game_over(self):
         self.menu.disable_resume()
