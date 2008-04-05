@@ -30,7 +30,7 @@ class Conveyor(ClickableActor): # should inherit from actors as well so we can c
         #is there an easier way to clear a list?
         while len(self.children) > 0:
             robot = self.children.pop()
-            robot.move(0,-100)
+            robot.move(0,-800)
             self.dispatch_event('on_recycle_robot',robot)
 Conveyor.register_event_type('on_recycle_robot')
 
