@@ -24,9 +24,8 @@ class Claw(Actor):
         print "event caught by claw!"
         if not self.heldTarget and not isinstance(clickable, Robot):
             return False
-        if self.tracking == False or self.heldTarget == None:
-            self.tracking = True
-            self.target = clickable
+        self.tracking = True
+        self.target = clickable
         return True
    
     def update(self,dt):
@@ -56,20 +55,20 @@ class Claw(Actor):
         
     def finishTracking(self):
         if isinstance(self.target,Robot):
-            if self.heldTarget == None:
+            if self.heldTarget == None: #grab the robot
                 self.changeFrame(1)
                 self.target.parent.detatch(self.target)
                 self.target.parent = None
                 self.heldTarget = self.target
                 self.holding = True
-            elif self.target.connect(self.heldTarget):
+            elif self.target.connect(self.heldTarget): #try to connect these robots together
                 self.heldTarget.dispatch_event('remove_actor',self.heldTarget)
                 self.heldTarget = None
                 self.changeFrame(0)
         elif self.heldTarget: #lets set down the robot
-            self.target.attach(self.heldTarget)
-            self.heldTarget = None
-            self.changeFrame(0)
+            if self.target.attach(self.heldTarget):
+                self.heldTarget = None
+                self.changeFrame(0)
         
         self.target = None
         self.tracking = False

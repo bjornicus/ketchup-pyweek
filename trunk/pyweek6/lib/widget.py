@@ -3,8 +3,9 @@ from pyglet.gl import *
 
 class Widget(object):
     def __init__(self,parent,x,y,width,height):
-        parent.children.append(self)
-        self.parent = parent
+        if parent:
+            parent.children.append(self)
+            self.parent = parent
         self.x = x
         self.y = y
         self.width = width
@@ -78,6 +79,7 @@ class ClickableActor(Actor, Widget):
     def attach(self,other):
         self.children.append(other)
         other.parent = self
+        return True
         
     def detatch(self,other):
         if other in self.children:

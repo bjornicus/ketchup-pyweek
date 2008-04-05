@@ -12,6 +12,7 @@ ORDER_IMAGE_WIDTH = 48
 
 class Conveyor(ClickableActor): # should inherit from actors as well so we can call update
     SPEED = 30. #pixels per second
+    ROBOTOFFSET = 10
     def __init__(self, parent):
         ClickableActor.__init__(self, parent, 'dummy.png', x=0, y=200, z=-0.1, width=730, height=80)
 
@@ -26,6 +27,16 @@ class Conveyor(ClickableActor): # should inherit from actors as well so we can c
             if robot.x > self.width:
                 self.dispatch_event('on_recycle_robot',robot)
                 self.children.remove(robot)
+                
+    def attach(self,robot):
+        #test for collisions so we don't overlap robots
+        for child in self.children:
+            #this will have to me more complicated if our robots have different widths
+            if abs(robot.x - child.x) < robot.width: 
+                return False
+        robot.y = self.y + Conveyor.ROBOTOFFSET
+        robot.update_stacking()
+        return ClickableActor.attach(self,robot)
                 
     def clearRobots(self):
         #is there an easier way to clear a list?
@@ -76,6 +87,8 @@ class Robot(ClickableActor):
         Actor.move(self,dx,dy)
         for part in self.parts:
             part.move(dx,dy)
+            
+    
     def draw(self): # we don't actually draw the robot, it just holds the parts
         self.draw_bounding_box()
         for part in self.parts:
@@ -113,6 +126,7 @@ class Robot(ClickableActor):
         legheight = bodyheight = headheight = 0
         if self.legs:
             legheight = self.legs.image.height
+            self.legs.y = self.y
         if self.body:
             bodyheight = self.body.image.height
             self.body.y = self.y + legheight
@@ -241,7 +255,12 @@ class RandomPartGenerator(Actor):
     def make_part(self,dt):
         if self.currentRobot:
             return
-        newrobot = Robot(self.targetConveyor, self.x,self.y)
+        newrobot = Robot(None, self.x,self.y)
+        if not self.targetConveyor.attach(newrobot):
+            return
+        #attaching will have adjusted the y value, so change it back
+        newrobot.y = self.y
+        newrobot.update_stacking()
         for i in range(1):
             type = random.choice(('head','body','legs'))
             flavor = random.choice((1,2,3))
