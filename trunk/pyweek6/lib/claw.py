@@ -75,13 +75,14 @@ class Claw(Actor):
         
     def track(self,dt):
         speed = self.speed * dt
-        targetHighY = self.target.targetY() + self.target.height
-        targetX = self.target.targetX() - (abs(self.target.image[0].width - self.image[0].width)/2)
+        targetHighY = self.target.centerY() + self.target.height/2
+        targetX = self.target.centerX()
+        myCenterX = self.x +self.image[self.currentFrame].width/2
         if self.heldTarget != None:
             targetHighY += 25
         selfHighY = self.y + (self.image[0].height / 2)
         
-        distance = targetX - self.x
+        distance = targetX - myCenterX
         if distance == 0:
             self.xdir = 0
         else:
@@ -97,10 +98,10 @@ class Claw(Actor):
         
         self.move(self.xspeed,self.yspeed)
         #small hack to get the new claw to drop off stuff at the finished bin
-        maxYdiff = 1
+        maxYdiff = 2
         if isinstance(self.target,FinishedBin):
             maxYdiff = 64
-        if( abs(targetX - self.x) < 1 and abs(targetHighY - selfHighY) < maxYdiff ):
+        if( abs(targetX - myCenterX) < 2 and abs(targetHighY - selfHighY) < maxYdiff ):
             self.finishTracking()
             
     def returnToTop(self,dt):
