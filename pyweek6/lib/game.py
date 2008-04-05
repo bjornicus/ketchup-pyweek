@@ -63,6 +63,8 @@ class Game(event.EventDispatcher):
     def update(self,dt):
         if self.state == 'gameOver':
             self.background.blit(200,100,-0.9)
+        elif self.state == 'levelPaused':
+            self.levelPausedState(dt)
         else:
             self.background.blit(0,0,-0.9)
         if self.state == 'levelBegin':
@@ -74,6 +76,14 @@ class Game(event.EventDispatcher):
         elif self.state == 'gameOver':
             self.gameOverState(dt)
         
+    def levelPausedState(self,dt):
+        self.levelText = pygletfont.Text(self.font, "Paused", x = 800 / 2, y = 350, halign = pygletfont.Text.CENTER)
+        self.levelInfoText = pygletfont.Text(self.fontsmall, "Press Spacebar to Unpause.", x = 800 / 2, y = 350 - self.font.ascent, halign = pygletfont.Text.CENTER)
+        self.levelInfoText.color = self.levelStatsColor
+        self.levelText.color = self.levelStatsColor
+        self.levelText.draw()
+        self.levelInfoText.draw()
+    
     def levelBeginState(self,dt):
         self.timer.update(dt)
         self.updateActors(0)
@@ -134,6 +144,14 @@ class Game(event.EventDispatcher):
     def remove_actor(self, actor):
         self.actors.remove(actor)
 
+    def on_pause(self):
+        self.state = 'levelPaused'
+        self.dispatch_event('stop_music')
+    
+    def on_un_pause(self):
+        self.state = 'levelRunning'
+        self.dispatch_event('play_music')
+
     def on_recycle_robot(self,robot):
         self.recyclebin.attach(robot)
 
@@ -154,7 +172,11 @@ class Game(event.EventDispatcher):
     def on_key_press(self, symbol, modifiers):
         if self.state == 'levelRunning':
             if symbol == key.PAUSE or symbol == key.SPACE:
-                self.dispatch_event('on_quit')
+                self.dispatch_event('on_pause')
+                return True
+        if self.state == 'levelPaused':
+            if symbol == key.PAUSE or symbol == key.SPACE:
+                self.dispatch_event('on_un_pause')
                 return True
         elif self.state == 'gameOver':
             self.dispatch_event('on_game_over')
@@ -203,6 +225,9 @@ class Game(event.EventDispatcher):
         self.timer.set(0,7,True)
 
 Game.register_event_type('on_pause')
+Game.register_event_type('on_un_pause')
+Game.register_event_type('play_music')
+Game.register_event_type('stop_music')
 Game.register_event_type('on_quit')
 Game.register_event_type('on_level_begin')
 Game.register_event_type('on_level_completed')
