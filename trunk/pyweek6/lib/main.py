@@ -63,6 +63,7 @@ class StateManager(object):
         self.credits.push_handlers(self)
         
         self.story = Story()
+        self.story.push_handlers(self)
         
         #change this back to intro before we ship!
         self.currentState = self.menu
