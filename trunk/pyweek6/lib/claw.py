@@ -1,7 +1,7 @@
 from pyglet import event
 from widget import ClickableActor
 from actor import Actor
-from actors import Robot
+from actors import Robot, Conveyor
 from actors import FinishedBin
 
 
@@ -75,8 +75,8 @@ class Claw(Actor):
         
     def track(self,dt):
         speed = self.speed * dt
-        targetHighY = self.target.y + self.target.height
-        targetX = self.target.x - (abs(self.target.image[0].width - self.image[0].width)/2)
+        targetHighY = self.target.targetY() + self.target.height
+        targetX = self.target.targetX() - (abs(self.target.image[0].width - self.image[0].width)/2)
         if self.heldTarget != None:
             targetHighY += 25
         selfHighY = self.y + (self.image[0].height / 2)

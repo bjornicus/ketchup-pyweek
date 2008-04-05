@@ -55,6 +55,12 @@ class ClickableActor(Actor, Widget):
     def __init__(self,parent, imageName="dummy.png", x=0, y=0, z=0, width=1, height=1, xframes = 1, yframes = 1):
         Widget.__init__(self,parent,x,y,width,height)
         Actor.__init__(self,imageName,x,y,z,xframes,yframes)
+        
+    #these are next two are for the claw:
+    def targetX(self):
+        return self.x
+    def targetY(self):
+        return self.y
     
     def draw(self):
         self.draw_bounding_box()

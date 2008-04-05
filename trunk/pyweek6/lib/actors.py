@@ -15,11 +15,16 @@ class Conveyor(ClickableActor): # should inherit from actors as well so we can c
     ROBOTOFFSET = 10
     def __init__(self, parent):
         ClickableActor.__init__(self, parent, 'dummy.png', x=0, y=200, z=-0.1, width=730, height=80)
+        self._targetX = 0
 
     def do_click_action(self,x,y):
         print "clicked the conveyor at (%i,%i) " %(x,y)
+        self._targetX = x
         ClickableActor.do_click_action(self,x,y)
-        
+
+    def targetX(self):
+        return self._targetX
+    
     def update(self,dt):
         ClickableActor.update(self,dt)
         for robot in self.children:
@@ -27,6 +32,7 @@ class Conveyor(ClickableActor): # should inherit from actors as well so we can c
             if robot.x > self.width:
                 self.dispatch_event('on_recycle_robot',robot)
                 self.children.remove(robot)
+        self._targetX += Conveyor.SPEED*dt
                 
     def attach(self,robot):
         #test for collisions so we don't overlap robots
