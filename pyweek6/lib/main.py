@@ -30,7 +30,7 @@ soundManager = SoundManager()
 # uncomment if you want to see all events output ot the terminal
 #from pyglet.window.event import WindowEventLogger
 #win.push_handlers(WindowEventLogger())
-clock.set_fps_limit(20)
+clock.set_fps_limit(30)
 fps_display = clock.ClockDisplay()
 
 def main():
@@ -91,7 +91,9 @@ class StateManager(object):
         self.play_music()
         
     def on_new_story_game(self):
-        self.on_new_game()
+        win.pop_handlers()
+        self.currentState = self.story
+        win.push_handlers(self.story)
         
     def on_game_over(self):
         self.menu.disable_resume()
