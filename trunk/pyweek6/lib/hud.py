@@ -34,7 +34,7 @@ HUD.register_event_type('add_actor_for_listening')
 
 class RobotsOrdered(Actor):
     def __init__(self, parent):
-        Actor.__init__(self, x=25, y=parent.y)
+        Actor.__init__(self, x=200, y=parent.y)
         self.font = pygletfont.load('Arial',30)
         self.remaining = 0
         self.ordered = 0
@@ -58,7 +58,7 @@ class RobotsOrdered(Actor):
 
 class Clock(Actor):
     def __init__(self, parent):
-        Actor.__init__(self, x=650, y=parent.y)
+        Actor.__init__(self, x=10, y=parent.y)
         self.font = pygletfont.load('Arial',30)
         self.timer = Timer()
         self.timer.on_expire = self.on_expire
@@ -83,7 +83,7 @@ Clock.register_event_type('on_level_over')
 
 class Money(Actor):
     def __init__(self, parent):
-        Actor.__init__(self, x=650, y=parent.y)
+        Actor.__init__(self, x=10, y=parent.y)
         self.font = pygletfont.load('Arial',30)
         self.set()
         self.y=590 - (self.font.ascent*2)

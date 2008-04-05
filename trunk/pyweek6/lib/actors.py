@@ -37,7 +37,7 @@ Conveyor.register_event_type('on_recycle_robot')
 
 class RecycleBin(Actor):
     def __init__(self):
-        Actor.__init__(self,x=730,y=20)
+        Actor.__init__(self,imageName = 'recycleBin01.png',x=696,y=1)
         self.robots = []
     def attach(self, robot):
         self.robots.append(robot)
@@ -223,7 +223,7 @@ FinishedBin.register_event_type('on_robot_rejected')
 
 class RandomPartGenerator(Actor):
     def __init__(self, conveyor):
-        Actor.__init__(self,y=370)
+        Actor.__init__(self,imageName = 'generator01.png',y=371)
         self.targetConveyor = conveyor
         self.currentRobot = None
         clock.schedule_once(self.make_part,0.1)
