@@ -65,6 +65,7 @@ class Claw(Actor):
                 self.target.parent.detatch(self.target)
                 self.target.parent = None
                 self.heldTarget = self.target
+                self.heldTarget.z=0.1 #draw above conveyor robots
                 self.holding = True
             elif self.target.connect(self.heldTarget): #try to connect these robots together
                 self.heldTarget.dispatch_event('remove_actor',self.heldTarget)
