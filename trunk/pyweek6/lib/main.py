@@ -18,6 +18,10 @@ from pyglet import image
 from pyglet.gl import *
 import data
 
+import pyglet
+#uncomment the next line for ship release:
+#pyglet.options['debug_gl'] = False
+
 win = window.Window(width=800, height=600, resizable=False)
 img = image.load(data.filepath('mouse.png'))
 cursor = window.ImageMouseCursor(img, 0, 32)
