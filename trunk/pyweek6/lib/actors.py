@@ -229,8 +229,8 @@ class FinishedBin(ClickableActor):
                 self.orderlist.remove(order)
                 #replace the robot with a tiny, temporary effect
                 ta = TimedActor(0,1,'Finsh.png')
-                ta.x = self.x
-                ta.y = self.y
+                ta.x = 400
+                ta.y = 300
                 #remove the robot and and add the flare
                 self.dispatch_event('add_actor',ta)
                 self.dispatch_event('remove_actor',robot)
@@ -284,16 +284,16 @@ RandomPartGenerator.register_event_type('add_actor')
 
 
 class TimedActor(Actor):
-    def __init__(self, mins, secs, x = 0, y = 0, z = 0.2, xframes = 1, yframes = 1):
-        Actor.__init__(self,None,x,y,z,xframes,yframes)
+    def __init__(self, mins, secs, imageName = None, x = 0, y = 0, z = 0.2, xframes = 1, yframes = 1):
+        Actor.__init__(self,imageName,x,y,z,xframes,yframes)
         self.timer = Timer()
         self.timer.set(mins,secs,True)
         
     def update(self,dt):
+        print "timed actor updated!"
         self.timer.update(dt)
-        if self.timer.active == True:
-            self.draw()
-        else:
+        self.draw()
+        if self.timer.active == False:
             self.dispatch_event('remove_actor',self)
             
 TimedActor.register_event_type('remove_actor')
