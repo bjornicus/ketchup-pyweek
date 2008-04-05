@@ -19,24 +19,28 @@ class Story(event.EventDispatcher):
     def update(self,dt):
         self.timer.update(dt)
         if self.timer.active == False:
-            self.currentStage += 1
-            self.timer.set(0,5,True)
+            self.nextStage()
             
-        if self.currentStage > len(stages):
+        if self.currentStage >= len(self.stages):
             self.finish()
         else:
-            self.stages[self.currentStage].blit(0,0)
+            self.stages[self.currentStage].update(dt)
             
     def on_key_press(self, symbol, modifiers):
-        self.finish()
+        self.nextStage()
         return True
 
     def on_mouse_press(self, x, y, button, modifiers):
-        self.finish()
+        self.nextStage()
         return True
 
     def finish(self):
         self.dispatch_event('on_new_game')
+        
+    def nextStage(self):
+        self.currentStage += 1
+        self.timer.set(0,5,True)
+        
 
 Story.register_event_type('on_new_game')
         
