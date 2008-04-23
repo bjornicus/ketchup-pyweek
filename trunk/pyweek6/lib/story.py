@@ -8,10 +8,10 @@ import data
 class Story(event.EventDispatcher):
     def __init__(self):
         self.stages = []
-        self.stages.append(Actor("story01.png"))
-        self.stages.append(Actor("story02.png"))
-        self.stages.append(Actor("story03.png"))
-        self.stages.append(Actor("story04.png"))
+        self.stages.append(Actor("Story01.png"))
+        self.stages.append(Actor("Story02.PNG"))
+        self.stages.append(Actor("Story03.png"))
+        self.stages.append(Actor("Story04.png"))
         self.currentStage = 0
         self.timer = Timer()
         self.timer.set(0,5,True)
